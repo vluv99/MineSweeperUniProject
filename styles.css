@@ -1,0 +1,60 @@
+:root {
+    /*--primary-color-*/
+    --background-color:#121212;
+    --text-on-background: white;
+    --highlight-dp6:  rgba(255, 255, 255, 0.11);
+    --highlight-dp12:  rgba(255, 255, 255, 0.14);
+    --highlight-dp24:  rgba(255, 255, 255, 0.16);
+}
+
+body{
+    background-color: var(--background-color);
+    color: var(--text-on-background);
+    margin: 5% 20%;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--text-on-background);
+    padding: 10px;
+    background-color: var(--highlight-dp6);
+}
+
+table{
+    background-color: var(--highlight-dp6);
+    width: 100%;
+    /*min-height: 20px;*/
+    border-spacing: revert;
+    display: block;
+    align-content: center;
+}
+
+tbody{
+    display: table-cell;
+    height: 100%;
+    width:600px;
+    text-align: center;
+}
+
+table tr{
+    line-height: 30px;
+}
+
+table td{
+    /*padding: 50% 0 50% 0;
+    padding: 5% 0 5% 0;*/
+    text-align: center;
+    border: var(--text-on-background);
+    border-style: solid;
+    border-width: 1px;
+    min-width: 30px;
+
+}
+
+table td:hover{
+    background-color: var(--highlight-dp24);
+}
