@@ -41,7 +41,7 @@ tbody{
 }
 
 table tr{
-    line-height: 30px;
+    line-height: 24px;
 }
 
 table td{
@@ -52,7 +52,8 @@ table td{
     border-style: solid;
     border-width: 1px;
     min-width: 30px;
-
+    height: 24px;
+    padding: 0;
 }
 
 table td:hover{
