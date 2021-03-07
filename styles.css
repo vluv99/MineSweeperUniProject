@@ -62,6 +62,43 @@ header {
     background-color: var(--highlight-dp24);
 }
 
+.data{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.list-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.list-row p{
+    margin-block-start: 2px!important;
+    margin-block-end: 2px!important;
+}
+
+.button{
+    margin-top: 20px;
+    padding: 10px;
+    background-color: var(--highlight-dp12);
+    text-align: center;
+    box-shadow: 2px 2px 7px 0px red;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+.button:hover{
+    background-color: var(--highlight-dp24);
+}
+
+.button:active{
+    box-shadow: 3px 2px 5px 0px red;
+    transform: translateY(4px);
+}
+
 /*table{
     background-color: var(--highlight-dp6);
     width: 100%;
