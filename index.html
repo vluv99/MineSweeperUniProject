@@ -7,11 +7,43 @@
 </head>
 <body>
 <header>
-    <div>
+    <div id="bomb_count">
+        <i class="fas fa-bomb"></i>
         40 bombs
     </div>
+    <div>face</div>
     <div>
-        s counter
+        <label id="minutes">00</label>
+        <label id="colon">:</label>
+        <label id="seconds">00</label>
+
+        <script type="text/javascript">
+            var minutesLabel = document.getElementById("minutes");
+            var secondsLabel = document.getElementById("seconds");
+            var totalSeconds = 0;
+            setInterval(setTime, 1000);
+
+            if (false) { //TOOD: set the timer to start counting once theres been a click!!!
+                function setTime() {
+                    ++totalSeconds;
+                    secondsLabel.innerHTML = pad(totalSeconds % 60);
+                    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+                }
+            }
+
+            function pad(val)
+            {
+                var valString = val + "";
+                if(valString.length < 2)
+                {
+                    return "0" + valString;
+                }
+                else
+                {
+                    return valString;
+                }
+            }
+        </script>
     </div>
 </header>
 

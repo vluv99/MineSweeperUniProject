@@ -1,43 +1,56 @@
 :root {
     /*--primary-color-*/
-    --background-color:#121212;
+    --background-color: #121212;
     --text-on-background: white;
-    --highlight-dp6:  rgba(255, 255, 255, 0.11);
-    --highlight-dp12:  rgba(255, 255, 255, 0.14);
-    --highlight-dp24:  rgba(255, 255, 255, 0.16);
+    --highlight-dp6: rgba(255, 255, 255, 0.11);
+    --highlight-dp12: rgba(255, 255, 255, 0.14);
+    --highlight-dp24: rgba(255, 255, 255, 0.16);
 }
 
-body{
+body {
     background-color: var(--background-color);
     color: var(--text-on-background);
-    margin: 5% 20%;
+    margin: 5% 35%;
+    min-width: 400px; /*TODO: fix, to it matches the number of buxes rather than fixed num*/
 }
 
-header{
+@media screen and (max-width: 992px) {
+    body {
+        margin: 5% 10%;
+    }
+}
+
+header {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: var(--text-on-background);
+    border-bottom-width: 5px;
+    border-bottom-color: var(--highlight-dp12);
     padding: 10px;
     background-color: var(--highlight-dp6);
-    margin-bottom: 10px;
 }
 
-.table{
+#seconds, #minutes, #colon, #bomb_count {
+    font-size: 2em;
+}
+
+.table {
     display: flex;
     flex-direction: column;
+    background-color: var(--highlight-dp6);
+    padding-bottom: 25px;
+    padding-top: 25px;
 }
 
-.row{
+.row {
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: center;
 }
 
-.cell{
+.cell {
     text-align: center;
     border: var(--text-on-background);
     border-style: solid;
@@ -45,7 +58,7 @@ header{
     padding: 15px;
 }
 
-.cell:hover{
+.cell:hover {
     background-color: var(--highlight-dp24);
 }
 
