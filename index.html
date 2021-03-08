@@ -6,11 +6,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link href="./fontawesome/fontawesome-free-5.15.2-web/fontawesome-free-5.15.2-web/css/all.css" rel="stylesheet">
 </head>
 <body>
 <header>
     <div id="bomb_count" class="header-content">
-        <i class="fas fa-bomb"></i>
         40 bombs
     </div>
     <div class="header-content">face</div>
@@ -51,7 +51,10 @@
 
 <div class="table">
     <div class="row">
-        <div class="cell"></div>
+        <div id="cell-1_1" class="cell" onclick="clickCell()">
+            <div id="cell-1_1-cover" class="cell-cover"></div>
+            <div id="cell-1_1-bomb" class="bomb-cell"><i class="fas fa-bomb"></i></div>
+        </div>
         <div class="cell"></div>
         <div class="cell"></div>
         <div class="cell"></div>
@@ -318,6 +321,45 @@
         <p class="button" >Hard</p>
     </div>
 </div>
+
+<script>
+    function clickCell() {
+        var element = document.getElementById("cell-1_1-cover");
+        element.classList.add("cell-cover__hidden");
+    }
+
+
+    /*cell = document.getElementById("cell-1_1");
+    document.getElementById("cell-1_1").onclick = function () {
+        cellClick.click();
+    }
+
+    function loadPic(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                document.getElementById("uploaded-pic").setAttribute('src', e.target.result);
+                document.getElementById("preview-holder").hidden = false;
+            }
+
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+    }
+
+    //closePic = document.getElementById("close-preview");
+
+    cellClick.onchange = function (ev) {
+        //loadPic(ev.srcElement);
+        //closePic.hidden = false;
+    }
+
+    closePic.onclick = function () {
+        picInput.value = "";
+        document.getElementById("preview-holder").hidden = true;
+        closePic.hidden = true;
+    }*/
+</script>
 
 
 <!--<table align="center">
