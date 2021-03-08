@@ -83,20 +83,21 @@ header {
 .list-row{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    /*justify-content: space-around;*/
+    width: 200px;
 }
 
-.list-username{
-    justify-content: flex-start;
-}
 .list-middle{
-    justify-content: flex-end;
-}
-.list-time{
-    justify-content: flex-end;
+    margin-right: 8px;
+    margin-left: auto;
+
 }
 
-.list-row p{
+.list-orderNumber{
+    margin-right: 8px;
+}
+
+.list-row div{
     margin-block-start: 2px!important;
     margin-block-end: 2px!important;
 }
