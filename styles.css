@@ -10,6 +10,7 @@
 body {
     background-color: var(--background-color);
     color: var(--text-on-background);
+    font-family: 'Montserrat', sans-serif;
     margin: 5% 35%;
     min-width: 400px; /*TODO: fix, to it matches the number of buxes rather than fixed num*/
 }
