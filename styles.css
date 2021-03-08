@@ -1,5 +1,5 @@
 :root {
-    /*--primary-color-*/
+    --primary-color: #911f17;
     --background-color: #121212;
     --text-on-background: white;
     --highlight-dp6: rgba(255, 255, 255, 0.11);
@@ -11,8 +11,12 @@ body {
     background-color: var(--background-color);
     color: var(--text-on-background);
     font-family: 'Montserrat', sans-serif;
-    margin: 5% 35%;
+    margin: 5% 30%;
     min-width: 400px; /*TODO: fix, to it matches the number of buxes rather than fixed num*/
+}
+
+::selection{
+    background: var(--primary-color);
 }
 
 @media screen and (max-width: 992px) {
@@ -24,7 +28,7 @@ body {
 header {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    /*justify-content: space-around;*/
     border-bottom-style: solid;
     border-bottom-width: 5px;
     border-bottom-color: var(--highlight-dp12);
@@ -32,8 +36,14 @@ header {
     background-color: var(--highlight-dp6);
 }
 
+.header-content{
+    width: 33.3%;
+    text-align: center;
+    align-self: center;
+}
+
 #seconds, #minutes, #colon, #bomb_count {
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 .table {
@@ -61,6 +71,7 @@ header {
 
 .cell:hover {
     background-color: var(--highlight-dp24);
+    cursor: pointer;
 }
 
 .data{
@@ -72,7 +83,17 @@ header {
 .list-row{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
+}
+
+.list-username{
+    justify-content: flex-start;
+}
+.list-middle{
+    justify-content: flex-end;
+}
+.list-time{
+    justify-content: flex-end;
 }
 
 .list-row p{
