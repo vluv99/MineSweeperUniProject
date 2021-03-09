@@ -146,6 +146,7 @@ header {
     font-weight: bold;
     cursor: pointer;
     user-select: none;
+    border-radius: 5px;
 }
 
 .button:hover{
@@ -164,39 +165,3 @@ header {
     height: 1.6em;
     white-space: nowrap;
 }
-
-/*table{
-    background-color: var(--highlight-dp6);
-    width: 100%;
-        min-height: 20px;
-    border-spacing: revert;
-    display: block;
-    align-content: center;
-}
-
-tbody{
-    display: table-cell;
-    height: 100%;
-    width:600px;
-    text-align: center;
-}
-
-table tr{
-    line-height: 24px;
-}
-
-table td{
-        padding: 50% 0 50% 0;
-        padding: 5% 0 5% 0;
-    text-align: center;
-    border: var(--text-on-background);
-    border-style: solid;
-    border-width: 1px;
-    min-width: 30px;
-    height: 24px;
-    padding: 0;
-}
-
-table td:hover{
-    background-color: var(--highlight-dp24);
-}*/ /*table style*/
