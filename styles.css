@@ -83,7 +83,7 @@ header {
     height: 100%;
     background-color: grey;
     z-index: 10;
-    transition: all 1s;
+    transition: all 0.7s;
 }
 
 @keyframes cell_animation {
@@ -96,8 +96,6 @@ header {
     animation-fill-mode: forwards;
 }
 
-
-
 .bomb-cell{
     position: absolute;
     top: 0;
@@ -107,6 +105,9 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: var(--text-on-background);
+    border-style: solid;
+    border-width: 1px;
 }
 
 .data{
