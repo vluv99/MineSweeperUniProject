@@ -2,29 +2,26 @@
 let clone;
 let i, j;
 
-for (i = 0; i < 11; i++) {
+for (i = 0; i < 10; i++) {
 
-    if (i ===0)
-    showContent('cell-row-' + i);
-    /*if (i === 0){
+    if (i < 1){
         for (j = 1; j < 10; j++) {
             cloneElement('#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
         }
-        i++;
         continue;
-    }*/
+    }
 
     cloneElement('#cell-row-0', 'cell-row-' + i, '.table');
 
-    for (j = 1; j < 10; j++) {
+    /*for (j = 1; j < 10; j++) {
         cloneElement('#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
-    }
+    }*/
 }
 
-function showContent(parentSelector) {
+function showContent() {
     var temp = document.getElementsByTagName("template")[0];
     var clon = temp.content.cloneNode(true);
-    document.querySelector(parentSelector).appendChild(clon);
+    document.body.appendChild(clon);
 }
 
 function cloneElement(selector, idValue, parentSelector){
