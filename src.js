@@ -5,6 +5,9 @@ var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
 
+var HARD_BOMB_NUMBER = 40;
+var EASY_BOMB_NUMBER = 10;
+
 // Default field appear
 easyFieldShow();
 
@@ -50,6 +53,8 @@ function easyFieldShow(){
     // Clean field area
     document.getElementById('table').innerHTML = "";
 
+    document.getElementById('bomb_count').innerHTML =  '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER;
+
     // Generate field
     for (i = 0; i < 10; i++) {
         cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
@@ -64,6 +69,8 @@ function easyFieldShow(){
 function hardFieldShow(){
     // Clean field area
     document.getElementById('table').innerHTML = "";
+
+    document.getElementById('bomb_count').innerHTML =  '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER;
 
     // Generate field
     for (i = 0; i < 15; i++) {
