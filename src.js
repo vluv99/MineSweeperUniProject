@@ -5,10 +5,12 @@ var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
 
+// Default field appear
 easyFieldShow();
 
 setInterval(setTime, 1000);
 
+// Time counter
 function setTime() {
     if (false) {
         totalSeconds++;
@@ -17,7 +19,7 @@ function setTime() {
     }
 }
 
-// Make single numbers appear double sized
+// Make single numbers appear double sized: 1 -> 01
 function pad(val) {
     var valString = val + "";
     if (valString.length < 2) {
@@ -43,7 +45,9 @@ function clickCell(cell) {
     cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
 }
 
+// Small field
 function easyFieldShow(){
+    // Clean field area
     document.getElementById('table').innerHTML = "";
 
     // Generate field
@@ -56,7 +60,9 @@ function easyFieldShow(){
     }
 }
 
+// Big field
 function hardFieldShow(){
+    // Clean field area
     document.getElementById('table').innerHTML = "";
 
     // Generate field
@@ -67,4 +73,9 @@ function hardFieldShow(){
             cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
         }
     }
+}
+
+function rightClick(e){
+    //e.preventDefault();
+    e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
 }

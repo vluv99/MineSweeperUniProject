@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:javascript="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Minesweeper</title>
@@ -26,7 +26,7 @@
     </div>
 </template>
 <template id="template-cell">
-    <div id="cell-0_0" class="cell" onclick="clickCell(this)">
+    <div id="cell-0_0" class="cell" onclick="clickCell(this)" oncontextmenu="rightClick(this);return false;">
         <div id="cell-0_0-cover" class="cell-cover"></div>
         <div id="cell-0_0-bomb" class="bomb-cell"><i class="fas fa-bomb"></i></div>
     </div>
