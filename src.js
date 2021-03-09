@@ -4,6 +4,8 @@ let i, j;
 
 for (i = 0; i < 11; i++) {
 
+    if (i ===0)
+    showContent('cell-row-' + i);
     /*if (i === 0){
         for (j = 1; j < 10; j++) {
             cloneElement('#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
@@ -19,10 +21,10 @@ for (i = 0; i < 11; i++) {
     }
 }
 
-function showContent() {
+function showContent(parentSelector) {
     var temp = document.getElementsByTagName("template")[0];
     var clon = temp.content.cloneNode(true);
-    document.body.appendChild(clon);
+    document.querySelector(parentSelector).appendChild(clon);
 }
 
 function cloneElement(selector, idValue, parentSelector){
