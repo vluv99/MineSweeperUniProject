@@ -33,15 +33,11 @@
                 }
             }
 
-            function pad(val)
-            {
+            function pad(val) {
                 var valString = val + "";
-                if(valString.length < 2)
-                {
+                if (valString.length < 2) {
                     return "0" + valString;
-                }
-                else
-                {
+                } else {
                     return valString;
                 }
             }
@@ -50,12 +46,14 @@
 </header>
 
 <div class="table">
-    <div id="cell-row-0" class="row">
-        <div id="cell-0_0" class="cell" onclick="clickCell()">
-            <div id="cell-0_0-cover" class="cell-cover"></div>
-            <div id="cell-0_0-bomb" class="bomb-cell"><i class="fas fa-bomb"></i></div>
+    <template id="template-cells">
+        <div id="cell-row-0" class="row">
+            <div id="cell-0_0" class="cell" onclick="clickCell()">
+                <div id="cell-0_0-cover" class="cell-cover"></div>
+                <div id="cell-0_0-bomb" class="bomb-cell"><i class="fas fa-bomb"></i></div>
+            </div>
         </div>
-    </div>
+    </template>
 </div>
 
 <div class="data">
@@ -126,7 +124,7 @@
     <div>
         <p>Hardness:</p>
         <p class="button">Easy</p>
-        <p class="button" >Hard</p>
+        <p class="button">Hard</p>
     </div>
 </div>
 
