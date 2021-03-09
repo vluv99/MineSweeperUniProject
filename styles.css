@@ -11,17 +11,19 @@ body {
     background-color: var(--background-color);
     color: var(--text-on-background);
     font-family: 'Montserrat', sans-serif;
-    margin: 5% 30%;
-    min-width: 400px; /*TODO: fix, to it matches the number of buxes rather than fixed num*/
+    margin: 5% 20%;
+    min-width: auto; /*TODO: fix, to it matches the number of buxes rather than fixed num*/
+
 }
 
 ::selection{
     background: var(--primary-color);
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1100px) {
     body {
-        margin: 5% 10%;
+        margin: 5% 5%;
+        min-width: 670px;
     }
 }
 

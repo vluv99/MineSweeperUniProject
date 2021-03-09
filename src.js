@@ -1,27 +1,33 @@
-
 let clone;
 let i, j;
 
-for (i = 0; i < 10; i++) {
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
 
-   /* for (j = 1; j < 10; j++) {
-        cloneElement('#template-cell', 'cell_' + i + '-' + j, '#cell-row-' + i);
-        //clickCell('cell_' + i + '-' + j);
-    }*/
+easyFieldShow();
 
-    cloneElement('#template-row', '#cell-row-0','cell-row-' + i, '.table');
+setInterval(setTime, 1000);
 
-    for (j = 0; j < 10; j++) {
-        cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+function setTime() {
+    if (false) {
+        totalSeconds++;
+        secondsLabel.innerHTML = pad(totalSeconds % 60);
+        minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
     }
 }
 
-function showContent() {
-    var temp = document.getElementsByTagName("template")[0];
-    var clon = temp.content.cloneNode(true);
-    document.body.appendChild(clon);
+// Make single numbers appear double sized
+function pad(val) {
+    var valString = val + "";
+    if (valString.length < 2) {
+        return "0" + valString;
+    } else {
+        return valString;
+    }
 }
 
+// Cloning function
 function cloneElement(selector, innerSelector, idValue, parentSelector) {
     // Create a clone of the cell
     clone = document.querySelector(selector).content.cloneNode(true);
@@ -35,4 +41,30 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 function clickCell(cell) {
     //var element = document.getElementById(elementId);
     cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
+}
+
+function easyFieldShow(){
+    document.getElementById('table').innerHTML = "";
+
+    // Generate field
+    for (i = 0; i < 10; i++) {
+        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
+
+        for (j = 0; j < 10; j++) {
+            cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+        }
+    }
+}
+
+function hardFieldShow(){
+    document.getElementById('table').innerHTML = "";
+
+    // Generate field
+    for (i = 0; i < 15; i++) {
+        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
+
+        for (j = 0; j < 20; j++) {
+            cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+        }
+    }
 }
