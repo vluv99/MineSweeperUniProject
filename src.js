@@ -4,6 +4,8 @@ let i, j;
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
+var firstClick = true;
+var setTimeVar = false;
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
@@ -18,7 +20,7 @@ setInterval(setTime, 1000);
 
 // Time counter
 function setTime() {
-    if (false) {
+    if (setTimeVar) {
         totalSeconds++;
         secondsLabel.innerHTML = pad(totalSeconds % 60);
         minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
@@ -47,6 +49,11 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 
 // Gives the cell the class to animate when clicked
 function clickCell(cell) {
+    if (firstClick){
+        setTimeVar = true;
+        firstClick = false;
+    }
+
     // Only disappear if there is no flag on the cell
     if (cell.querySelector("#cell-0_0-cover").innerHTML === "") {
         cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
@@ -105,6 +112,15 @@ function placeBombs(bombNumber, width, height) {
 function generateTable(tableWidth, tableHeight, bombNumber){
     // Clean field area
     document.getElementById('table').innerHTML = "";
+
+    //reset time if started before
+    firstClick = true;
+    setTimeVar = false;
+    totalSeconds = 0;
+    document.querySelector("#minutes").innerHTML = '00';
+    document.querySelector("#seconds").innerHTML = '00';
+
+    // create array to handle game play
     array = new Array(tableWidth * tableHeight - 1);
 
     // Set number of bombs in header
