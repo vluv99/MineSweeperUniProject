@@ -7,8 +7,10 @@ var totalSeconds = 0;
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
+var tableWidth, tableHeight;
+var array;
 
-// Default field appear
+// Default field appears
 easyFieldShow();
 
 setInterval(setTime, 1000);
@@ -47,57 +49,105 @@ function clickCell(cell) {
     // Only disappear if there is no flag on the cell
     if (cell.querySelector("#cell-0_0-cover").innerHTML === "") {
         cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
-    } else if (cell.querySelector("#cell-0_0-cover").innerHTML === '<i class="fab fa-font-awesome-flag flag-icon"></i>'){
+    } else if (cell.querySelector("#cell-0_0-cover").innerHTML === '<i class="fab fa-font-awesome-flag flag-icon"></i>') {
         //nothing happens
     }
 
+    // TODO: make face change for click event
     /*document.querySelector("#face").innerHTML = '<i class="far fa-surprise"></i>';
     document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
     <i class="far fa-dizzy"></i>*/
 }
 
 // Right click, flag placing function
-function rightClick(e){
+function rightClick(e) {
     // Check if its empty
     if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
         e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
-    }else {
+    } else {
         e.querySelector("#cell-0_0-cover").innerHTML = "";
     }
 }
 
 // Small field
-function easyFieldShow(){
+function easyFieldShow() {
+    tableHeight = 10;
+    tableWidth = 10;
+
     // Clean field area
     document.getElementById('table').innerHTML = "";
+    array = new Array(EASY_BOMB_NUMBER * EASY_BOMB_NUMBER - 1);
 
     // Set number of bombs in header
-    document.getElementById('bomb_count').innerHTML =  '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER;
+    document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER;
 
+    console.log("Generted array:")
     // Generate field
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < tableHeight; i++) {
         cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
 
-        for (j = 0; j < 10; j++) {
+        for (j = 0; j < tableWidth; j++) {
             cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+            array[i*10+j] = 'cell_' + i + '-' + j;
+
+            console.log((i) + "-" + (j) + ": " + array[i*10+j]);
         }
     }
+
+    placeBombs(EASY_BOMB_NUMBER, tableWidth, tableHeight);
 }
 
 // Big field
-function hardFieldShow(){
+function hardFieldShow() {
+    tableHeight = 15;
+    tableWidth = 18;
+
     // Clean field area
     document.getElementById('table').innerHTML = "";
+    array = new Array(tableWidth * tableHeight - 1);
 
     // Set number of bombs in header
-    document.getElementById('bomb_count').innerHTML =  '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER;
+    document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER;
 
     // Generate field
-    for (i = 0; i < 15; i++) {
+    for (i = 0; i < tableHeight; i++) {
         cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
 
-        for (j = 0; j < 18; j++) {
+        for (j = 0; j < tableWidth; j++) {
             cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+            array[i, j] = 'cell_' + i + '-' + j;
         }
+    }
+
+    placeBombs(HARD_BOMB_NUMBER, tableWidth, tableHeight);
+}
+
+function placeBombs(bombNumber, width, height) {
+    var randX, randY;
+    var cellId;
+    var randArray = [];
+
+    console.log("Bombs cell ids:")
+    for (i = 0, j = 0; i < bombNumber; i++, j++) {
+        // Returns a random integer from 0 to bombNumber-1
+        randX = Math.floor(Math.random() * 10);
+        randY = Math.floor(Math.random() * 10);
+
+        while (randArray.includes(randX + "-" + randY)){
+            randX = Math.floor(Math.random() * 10);
+            randY = Math.floor(Math.random() * 10);
+        }
+        randArray.push(randX + "-" + randY);
+
+        // Make the needed id string
+        cellId = array[randX*10+randY];
+
+        console.log(cellId);
+
+        // Give the icon to the html
+        document.getElementById(cellId).querySelector('#cell-0_0-bomb').innerHTML = '<i class="fas fa-bomb"></i>';
+
+        // Change the id in the array to bomb-NUMBER
+        array[randX*10+randY] = "bomb-" + i;
     }
 }
