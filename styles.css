@@ -50,8 +50,12 @@ header {
     margin-right: 12px
 }
 
-#seconds, #minutes, #colon, #bomb_count {
+#seconds, #minutes, #colon, #bomb_count{
     font-size: 1.5em;
+}
+
+#face{
+    font-size: 2.2em;
 }
 
 .table {

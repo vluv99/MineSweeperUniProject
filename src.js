@@ -44,8 +44,26 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 
 // Gives the cell the class to animate when clicked
 function clickCell(cell) {
-    //var element = document.getElementById(elementId);
-    cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
+    // Only disappear if there is no flag on the cell
+    if (cell.querySelector("#cell-0_0-cover").innerHTML === "") {
+        cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
+    } else if (cell.querySelector("#cell-0_0-cover").innerHTML === '<i class="fab fa-font-awesome-flag flag-icon"></i>'){
+        //nothing happens
+    }
+
+    /*document.querySelector("#face").innerHTML = '<i class="far fa-surprise"></i>';
+    document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
+    <i class="far fa-dizzy"></i>*/
+}
+
+// Right click, flag placing function
+function rightClick(e){
+    // Check if its empty
+    if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
+        e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
+    }else {
+        e.querySelector("#cell-0_0-cover").innerHTML = "";
+    }
 }
 
 // Small field
@@ -53,6 +71,7 @@ function easyFieldShow(){
     // Clean field area
     document.getElementById('table').innerHTML = "";
 
+    // Set number of bombs in header
     document.getElementById('bomb_count').innerHTML =  '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER;
 
     // Generate field
@@ -70,19 +89,15 @@ function hardFieldShow(){
     // Clean field area
     document.getElementById('table').innerHTML = "";
 
+    // Set number of bombs in header
     document.getElementById('bomb_count').innerHTML =  '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER;
 
     // Generate field
     for (i = 0; i < 15; i++) {
         cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
 
-        for (j = 0; j < 20; j++) {
+        for (j = 0; j < 18; j++) {
             cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
         }
     }
-}
-
-function rightClick(e){
-    //e.preventDefault();
-    e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
 }
