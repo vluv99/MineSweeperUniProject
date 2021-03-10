@@ -72,6 +72,13 @@ function rightClick(e) {
     // Check if its empty
     if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
         e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
+        if (document.getElementById('bomb_count').innerText === "40"){
+            HARD_BOMB_NUMBER--;
+            document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER.toString();
+        } else if(document.getElementById('bomb_count').innerText === "10"){
+            EASY_BOMB_NUMBER--;
+            document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER.toString();
+        }
     } else {
         e.querySelector("#cell-0_0-cover").innerHTML = "";
     }
