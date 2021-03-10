@@ -8,10 +8,11 @@ var totalSeconds = 0;
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
-var array;
+var array, randArray;
 
 // Default field appears
-easyFieldShow();
+//easyFieldShow();
+hardFieldShow();
 
 setInterval(setTime, 1000);
 
@@ -69,13 +70,14 @@ function rightClick(e) {
     }
 }
 
+// function to place randomized bombs on the game field
 function placeBombs(bombNumber, width, height) {
     var randX, randY;
     var cellId;
-    var randArray = [];
+    randArray = [];
 
     console.log("Bomb cell ids:")
-    for (i = 0, j = 0; i < bombNumber; i++, j++) {
+    for (i = 0; i < bombNumber; i++) {
         // Returns a random integer from 0 to bombNumber-1
         randX = Math.floor(Math.random() * width);
         randY = Math.floor(Math.random() * height);
@@ -84,21 +86,22 @@ function placeBombs(bombNumber, width, height) {
             randX = Math.floor(Math.random() * width);
             randY = Math.floor(Math.random() * height);
         }
-        randArray.push(randX + "-" + randY);
+        randArray.push(randY + "-" + randX);
 
         // Make the needed id string
-        cellId = array[randX*10+randY];
+        cellId = array[randY*10+randX];
 
-        console.log(cellId);
+        console.log(i + ". " + cellId);
 
         // Give the icon to the html
         document.getElementById(cellId).querySelector('#cell-0_0-bomb').innerHTML = '<i class="fas fa-bomb"></i>';
 
         // Change the id in the array to bomb-NUMBER
-        array[randX*10+randY] = "bomb-" + i;
+        //array[randY*10+randX] = "bomb-" + i;
     }
 }
 
+// Shared function to generate the table
 function generateTable(tableWidth, tableHeight, bombNumber){
     // Clean field area
     document.getElementById('table').innerHTML = "";
@@ -108,14 +111,15 @@ function generateTable(tableWidth, tableHeight, bombNumber){
     document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombNumber;
 
     // Generate field
-    for (i = 0; i < tableHeight; i++) {
+    for (i = 0; i < tableHeight; i++) { //row
         cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
 
-        for (j = 0; j < tableWidth; j++) {
+        for (j = 0; j < tableWidth; j++) { //cells
             cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
             array[i*10+j] = 'cell_' + i + '-' + j;
 
             console.log((i) + "-" + (j) + ": " + array[i*10+j]);
+            // JS doesn't have multilayer arrays, so that is improvisation
         }
     }
 }
@@ -133,8 +137,8 @@ function easyFieldShow() {
 
 // Big field
 function hardFieldShow() {
-    tableHeight = 15;
-    tableWidth = 18;
+    tableHeight = 15;   // its reversed for some reason?
+    tableWidth = 18;    // but when generated, it does it right :/
 
     console.log("Generated table HARD:")
     generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
