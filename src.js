@@ -69,73 +69,20 @@ function rightClick(e) {
     }
 }
 
-// Small field
-function easyFieldShow() {
-    tableHeight = 10;
-    tableWidth = 10;
-
-    // Clean field area
-    document.getElementById('table').innerHTML = "";
-    array = new Array(EASY_BOMB_NUMBER * EASY_BOMB_NUMBER - 1);
-
-    // Set number of bombs in header
-    document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER;
-
-    console.log("Generted array:")
-    // Generate field
-    for (i = 0; i < tableHeight; i++) {
-        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
-
-        for (j = 0; j < tableWidth; j++) {
-            cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
-            array[i*10+j] = 'cell_' + i + '-' + j;
-
-            console.log((i) + "-" + (j) + ": " + array[i*10+j]);
-        }
-    }
-
-    placeBombs(EASY_BOMB_NUMBER, tableWidth, tableHeight);
-}
-
-// Big field
-function hardFieldShow() {
-    tableHeight = 15;
-    tableWidth = 18;
-
-    // Clean field area
-    document.getElementById('table').innerHTML = "";
-    array = new Array(tableWidth * tableHeight - 1);
-
-    // Set number of bombs in header
-    document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER;
-
-    // Generate field
-    for (i = 0; i < tableHeight; i++) {
-        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
-
-        for (j = 0; j < tableWidth; j++) {
-            cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
-            array[i, j] = 'cell_' + i + '-' + j;
-        }
-    }
-
-    placeBombs(HARD_BOMB_NUMBER, tableWidth, tableHeight);
-}
-
 function placeBombs(bombNumber, width, height) {
     var randX, randY;
     var cellId;
     var randArray = [];
 
-    console.log("Bombs cell ids:")
+    console.log("Bomb cell ids:")
     for (i = 0, j = 0; i < bombNumber; i++, j++) {
         // Returns a random integer from 0 to bombNumber-1
-        randX = Math.floor(Math.random() * 10);
-        randY = Math.floor(Math.random() * 10);
+        randX = Math.floor(Math.random() * width);
+        randY = Math.floor(Math.random() * height);
 
         while (randArray.includes(randX + "-" + randY)){
-            randX = Math.floor(Math.random() * 10);
-            randY = Math.floor(Math.random() * 10);
+            randX = Math.floor(Math.random() * width);
+            randY = Math.floor(Math.random() * height);
         }
         randArray.push(randX + "-" + randY);
 
@@ -150,4 +97,47 @@ function placeBombs(bombNumber, width, height) {
         // Change the id in the array to bomb-NUMBER
         array[randX*10+randY] = "bomb-" + i;
     }
+}
+
+function generateTable(tableWidth, tableHeight, bombNumber){
+    // Clean field area
+    document.getElementById('table').innerHTML = "";
+    array = new Array(tableWidth * tableHeight - 1);
+
+    // Set number of bombs in header
+    document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombNumber;
+
+    // Generate field
+    for (i = 0; i < tableHeight; i++) {
+        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
+
+        for (j = 0; j < tableWidth; j++) {
+            cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+            array[i*10+j] = 'cell_' + i + '-' + j;
+
+            console.log((i) + "-" + (j) + ": " + array[i*10+j]);
+        }
+    }
+}
+
+// Small field
+function easyFieldShow() {
+    tableHeight = 10;
+    tableWidth = 10;
+
+    console.log("Generated table EASY:")
+    generateTable(tableWidth, tableHeight, EASY_BOMB_NUMBER);
+
+    placeBombs(EASY_BOMB_NUMBER, tableWidth, tableHeight);
+}
+
+// Big field
+function hardFieldShow() {
+    tableHeight = 15;
+    tableWidth = 18;
+
+    console.log("Generated table HARD:")
+    generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
+
+    placeBombs(HARD_BOMB_NUMBER, tableWidth, tableHeight);
 }
