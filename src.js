@@ -8,11 +8,11 @@ var totalSeconds = 0;
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
-var array, randArray;
+var array, bombArray;
 
 // Default field appears
-//easyFieldShow();
-hardFieldShow();
+easyFieldShow();
+//hardFieldShow();
 
 setInterval(setTime, 1000);
 
@@ -74,7 +74,7 @@ function rightClick(e) {
 function placeBombs(bombNumber, width, height) {
     var randX, randY;
     var cellId;
-    randArray = [];
+    bombArray = [];
 
     console.log("Bomb cell ids:")
     for (i = 0; i < bombNumber; i++) {
@@ -82,11 +82,11 @@ function placeBombs(bombNumber, width, height) {
         randX = Math.floor(Math.random() * width);
         randY = Math.floor(Math.random() * height);
 
-        while (randArray.includes(randX + "-" + randY)){
+        while (bombArray.includes(randX + "-" + randY)){
             randX = Math.floor(Math.random() * width);
             randY = Math.floor(Math.random() * height);
         }
-        randArray.push(randY + "-" + randX);
+        bombArray.push(randY + "-" + randX);
 
         // Make the needed id string
         cellId = array[randY*10+randX];
