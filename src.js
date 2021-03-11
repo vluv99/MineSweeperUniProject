@@ -47,6 +47,12 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
     document.querySelector(parentSelector).appendChild(clone);
 }
 
+function changeFace(lose){
+    if (lose === false){
+        document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
+    }
+}
+
 // Gives the cell the class to animate when clicked
 function clickCell(cell) {
     if (firstClick){
@@ -62,8 +68,10 @@ function clickCell(cell) {
     }
 
     // TODO: make face change for click event
-    /*document.querySelector("#face").innerHTML = '<i class="far fa-surprise"></i>';
-    document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
+    document.querySelector("#face").innerHTML = '<i class="far fa-surprise"></i>';
+    //setInterval(changeFace(false), 100000);
+
+    /*document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
     <i class="far fa-dizzy"></i>*/
 }
 
