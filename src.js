@@ -1,5 +1,5 @@
 let clone;
-let i, j;
+let i, j, x, y;
 
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
@@ -11,6 +11,11 @@ var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
 var array, bombArray;
+
+var iconFlag = '<i class="fab fa-font-awesome-flag flag-icon"></i>';
+var iconBomb = '<i class="fas fa-bomb"></i>';
+var iconHappyFace = '<i class="far fa-laugh-beam"></i>';
+var iconSurpriseFace = '<i class="far fa-surprise"></i>';
 
 // Default field appears
 easyFieldShow();
@@ -47,28 +52,28 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
     document.querySelector(parentSelector).appendChild(clone);
 }
 
-function changeFace(lose){
-    if (lose === false){
-        document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
+function changeFace(lose) {
+    if (lose === false) {
+        document.querySelector("#face").innerHTML = iconHappyFace;
     }
 }
 
 // Gives the cell the class to animate when clicked
 function clickCell(cell) {
-    if (firstClick){
+    if (firstClick) {
         setTimeVar = true;
         firstClick = false;
     }
 
     // Only disappear if there is no flag on the cell
-    if (cell.querySelector("#cell-0_0-cover").innerHTML === "") {
+    /*if (cell.querySelector("#cell-0_0-cover").innerHTML === "") {
         cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
-    } else if (cell.querySelector("#cell-0_0-cover").innerHTML === '<i class="fab fa-font-awesome-flag flag-icon"></i>') {
+    } else if (cell.querySelector("#cell-0_0-cover").innerHTML === iconFlag) {
         //nothing happens
-    }
+    }*/
 
     // TODO: make face change for click event
-    document.querySelector("#face").innerHTML = '<i class="far fa-surprise"></i>';
+    document.querySelector("#face").innerHTML = iconSurpriseFace;
     //setInterval(changeFace(false), 100000);
 
     /*document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
@@ -80,15 +85,24 @@ function rightClick(e) {
     // Check if its empty
     if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
         e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
-        if (document.getElementById('bomb_count').innerText === "40"){
+        if (document.getElementById('bomb_count').innerText === "40") {
             HARD_BOMB_NUMBER--;
             document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER.toString();
-        } else if(document.getElementById('bomb_count').innerText === "10"){
+        } else if (document.getElementById('bomb_count').innerText === "10") {
             EASY_BOMB_NUMBER--;
             document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER.toString();
         }
     } else {
         e.querySelector("#cell-0_0-cover").innerHTML = "";
+    }
+}
+
+function updateCell(cell, element) {
+
+    if (cell.hidden === false) {
+        element.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
+    } else if (cell.bomb === true) {
+        document.getElementById(cellId).querySelector('#cell-0_0-bomb').innerHTML = iconBomb;
     }
 }
 
@@ -98,33 +112,31 @@ function placeBombs(bombNumber, width, height) {
     var cellId;
     bombArray = [];
 
-    console.log("Bomb cell ids:")
-    for (i = 0; i < bombNumber; i++) {
+    //console.log("Bomb cell ids:")
+
+    while (bombNumber >= 1) {
+
         // Returns a random integer from 0 to bombNumber-1
         randX = Math.floor(Math.random() * width);
         randY = Math.floor(Math.random() * height);
 
-        while (bombArray.includes(randX + "-" + randY)){
+        while (bombArray.includes(randX + "-" + randY)) {
             randX = Math.floor(Math.random() * width);
             randY = Math.floor(Math.random() * height);
         }
         bombArray.push(randY + "-" + randX);
 
-        // Make the needed id string
-        cellId = array[randY*10+randX];
+        array[randY][randX].bomb = true;
+        let element = document.getElementById('cell-0_0');
 
-        console.log(i + ". " + cellId);
+        updateCell(array[randX][randY], element);
 
-        // Give the icon to the html
-        document.getElementById(cellId).querySelector('#cell-0_0-bomb').innerHTML = '<i class="fas fa-bomb"></i>';
-
-        // Change the id in the array to bomb-NUMBER
-        //array[randY*10+randX] = "bomb-" + i;
+        bombNumber--;
     }
 }
 
 // Shared function to generate the table
-function generateTable(tableWidth, tableHeight, bombNumber){
+function generateTable(tableWidth, tableHeight, bombNumber) {
     // Clean field area
     document.getElementById('table').innerHTML = "";
 
@@ -135,22 +147,48 @@ function generateTable(tableWidth, tableHeight, bombNumber){
     document.querySelector("#minutes").innerHTML = '00';
     document.querySelector("#seconds").innerHTML = '00';
 
-    // create array to handle game play
-    array = new Array(tableWidth * tableHeight - 1);
+    // create an empty array
+    array = [];
 
     // Set number of bombs in header
-    document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombNumber;
+    document.getElementById('bomb_count').innerHTML = iconFlag + bombNumber;
 
     // Generate field
     for (i = 0; i < tableHeight; i++) { //row
-        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
+        array[i] = [];
+        //cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
 
         for (j = 0; j < tableWidth; j++) { //cells
-            cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
-            array[i*10+j] = 'cell_' + i + '-' + j;
+            array[i][j] = {flag: false, bomb: false, neadbyBombCount: 0, hidden: true, id: 'cell_' + i + '-' + j}
+            //cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
+        }
+    }
 
-            console.log((i) + "-" + (j) + ": " + array[i*10+j]);
-            // JS doesn't have multilayer arrays, so that is improvisation
+    // Generate bombs onto the table
+    if (bombNumber === EASY_BOMB_NUMBER) {
+        placeBombs(EASY_BOMB_NUMBER, tableWidth, tableHeight);
+    } else if (bombNumber === HARD_BOMB_NUMBER) {
+        placeBombs(HARD_BOMB_NUMBER, tableWidth, tableHeight);
+    }
+
+    drawTable(array);
+}
+
+function drawTable(array) {
+
+    for (let x = 0; x < array.length; x++) {
+        const row = array[x];
+
+        //Copy Row
+        cloneElement('#template-row', '#cell-row-0', 'cell-row-' + x, '.table');
+
+        for (let y = 0; y < row.length; y++) {
+            const cell = row[y];
+
+            //Copy Cell
+            let element = cloneElement('#template-cell', '#cell-0_0', 'cell_' + x + '-' + y, '#cell-row-' + x);
+
+            updateCell(cell, element);
         }
     }
 }
@@ -162,8 +200,6 @@ function easyFieldShow() {
 
     console.log("Generated table EASY:")
     generateTable(tableWidth, tableHeight, EASY_BOMB_NUMBER);
-
-    placeBombs(EASY_BOMB_NUMBER, tableWidth, tableHeight);
 }
 
 // Big field
@@ -173,6 +209,4 @@ function hardFieldShow() {
 
     console.log("Generated table HARD:")
     generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
-
-    placeBombs(HARD_BOMB_NUMBER, tableWidth, tableHeight);
 }
