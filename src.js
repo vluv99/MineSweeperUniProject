@@ -59,10 +59,19 @@ function changeFace(lose) {
 }
 
 // Gives the cell the class to animate when clicked
-function clickCell(cell) {
+function clickCell(html_cell) {
     if (firstClick) {
         setTimeVar = true;
         firstClick = false;
+    }
+
+    for (i = 0; i < array.length; i++){
+        for (j = 0; j < array[i].length; j++){
+            if (array[i][j].id === html_cell.id && array[i][j].flag === false){
+                array[i][j].hidden = false;
+                updateCell(array[i][j]);
+            }
+        }
     }
 
     // Only disappear if there is no flag on the cell
@@ -81,9 +90,9 @@ function clickCell(cell) {
 }
 
 // Right click, flag placing function
-function rightClick(e) {
+function rightClick(html_cell) {
     // Check if its empty
-    if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
+    /*if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
         e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
         if (document.getElementById('bomb_count').innerText === "40") {
             HARD_BOMB_NUMBER--;
@@ -94,15 +103,37 @@ function rightClick(e) {
         }
     } else {
         e.querySelector("#cell-0_0-cover").innerHTML = "";
+    }*/
+
+    for (i = 0; i < array.length; i++){
+        for (j = 0; j < array[i].length; j++){
+            if (array[i][j].id === html_cell.id && array[i][j].hidden === true){
+                // reverse the flag state
+                array[i][j].flag = !array[i][j].flag;
+                updateCell(array[i][j]);
+            }
+        }
     }
 }
 
-function updateCell(cell, element) {
+function updateCell(cell) {
+    var element = document.getElementById(cell.id);
 
+    // add class to cell for disappearing animation
     if (cell.hidden === false) {
         element.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
-    } else if (cell.bomb === true) {
-        document.getElementById(cellId).querySelector('#cell-0_0-bomb').innerHTML = iconBomb;
+    }
+
+    // place bombs in cell
+    if (cell.bomb === true) {
+        element.querySelector('#cell-0_0-bomb').innerHTML = iconBomb;
+    }
+
+    // update flag state in cell
+    if (cell.flag === true) {
+        element.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
+    } else {
+        element.querySelector("#cell-0_0-cover").innerHTML = "";
     }
 }
 
@@ -128,8 +159,6 @@ function placeBombs(bombNumber, width, height) {
 
         array[randY][randX].bomb = true;
         let element = document.getElementById('cell-0_0');
-
-        updateCell(array[randX][randY], element);
 
         bombNumber--;
     }
@@ -165,11 +194,7 @@ function generateTable(tableWidth, tableHeight, bombNumber) {
     }
 
     // Generate bombs onto the table
-    if (bombNumber === EASY_BOMB_NUMBER) {
-        placeBombs(EASY_BOMB_NUMBER, tableWidth, tableHeight);
-    } else if (bombNumber === HARD_BOMB_NUMBER) {
-        placeBombs(HARD_BOMB_NUMBER, tableWidth, tableHeight);
-    }
+    placeBombs(bombNumber, tableWidth, tableHeight);
 
     drawTable(array);
 }
@@ -186,9 +211,9 @@ function drawTable(array) {
             const cell = row[y];
 
             //Copy Cell
-            let element = cloneElement('#template-cell', '#cell-0_0', 'cell_' + x + '-' + y, '#cell-row-' + x);
+            cloneElement('#template-cell', '#cell-0_0', 'cell_' + x + '-' + y, '#cell-row-' + x);
 
-            updateCell(cell, element);
+            updateCell(cell);
         }
     }
 }
@@ -198,15 +223,15 @@ function easyFieldShow() {
     tableHeight = 10;
     tableWidth = 10;
 
-    console.log("Generated table EASY:")
+    //console.log("Generated table EASY:")
     generateTable(tableWidth, tableHeight, EASY_BOMB_NUMBER);
 }
 
 // Big field
 function hardFieldShow() {
-    tableHeight = 15;   // its reversed for some reason?
-    tableWidth = 18;    // but when generated, it does it right :/
+    tableHeight = 15;
+    tableWidth = 18;
 
-    console.log("Generated table HARD:")
+    //console.log("Generated table HARD:")
     generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
 }
