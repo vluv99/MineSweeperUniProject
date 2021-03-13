@@ -8,6 +8,7 @@ var firstClick = true;
 var setTimeVar = false;
 
 var isGameOver = false;
+var cellsToClickUntilWin;
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
@@ -104,6 +105,74 @@ function changeFace(html_cell) {
     }
 }
 
+function cellsDisappearing(html_cell) {
+    let countDisappearingCells = 0;
+    let cell;
+
+    for (i = 0; i < array.length; i++) {
+        for (j = 0; j < array[i].length; j++) {
+
+            // find clicked cell
+            if (array[i][j].id === html_cell.id){
+                cell = array[i][j];
+            }
+
+            for (x = 0; x < array.length - i; x++) {
+                let firstContinue = false;
+                let lastContinue = false;
+
+                for (y = 0; y < array[i].length - j; y++) {
+
+                    if (array[i + x][j + y].bomb === false) {
+                        // if ity empty add and animate
+                        if (array[i + x][j + y].neadbyBombCount === 0 || array[i - x][j - y].neadbyBombCount === 0){
+                            // check if plus the original cell is empty
+                            if (array[i + x][j + y].neadbyBombCount === 0){
+                                countDisappearingCells++;
+                                array[i + x][j + y].hidden = false;
+                            }
+
+                            // check if minus the original cell is empty
+                            if (array[i - x][j - y].neadbyBombCount === 0){
+                                countDisappearingCells++;
+                                array[i - x][j - y].hidden = false;
+                            }
+
+                        } // if it has a number add and animate but dont continue that loop
+                        else if (array[i + x][j + y].neadbyBombCount > 0 || array[i - x][j - y].neadbyBombCount > 0){
+
+                            // check if plus the original cell has number
+                            if (array[i + x][j + y].neadbyBombCount > 0){
+
+                                //check if its the fist number in that direction
+                                if (lastContinue === false){
+                                    countDisappearingCells++;
+                                    array[i + x][j + y].hidden = false;
+                                    lastContinue = true;
+                                }
+                            }
+
+                            // check if minus the original cell has number
+                            if (array[i - x][j - y].neadbyBombCount > 0){
+
+                                //check if its the fist number in that direction
+                                if (firstContinue === false){
+                                    countDisappearingCells++;
+                                    array[i - x][j - y].hidden = false;
+                                    firstContinue = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    cellsToClickUntilWin -= countDisappearingCells;
+}
+
 // Gives the cell the class to animate when clicked
 function clickCell(html_cell) {
 
@@ -124,7 +193,7 @@ function clickCell(html_cell) {
         for (j = 0; j < array[i].length; j++) {
 
             //check if theres no flag on the cell
-            if (array[i][j].flag === true && array[i][j].id === html_cell.id){
+            if (array[i][j].flag === true && array[i][j].id === html_cell.id) {
                 return;
             }
 
@@ -136,7 +205,9 @@ function clickCell(html_cell) {
                     return;
                 }
 
-                cell.hidden = false;
+                //cellsToClickUntilWin--; //TODO: if theres more than one cell disappears!!!
+                //cell.hidden = false;
+                cellsDisappearing(html_cell);
                 updateCell(cell);
             }
         }
@@ -145,13 +216,20 @@ function clickCell(html_cell) {
     // change for click event
     // check if player lost yet
     document.querySelector("#face").innerHTML = iconSurpriseFace;
-    if (cell.bomb === false) {
+    if (cell.bomb !== false) {
+        changeFace(html_cell);
+        gameEnd(true);
+    } else {
+        // header change face action
         setTimeout(function () {
             changeFace(html_cell);
         }, 300);
-    } else {
-        changeFace(html_cell);
-        gameEnd(true);
+
+        if (cellsToClickUntilWin === 0) {
+            gameEnd(false);
+        } else {
+            cellsDisappearing(html_cell);
+        }
     }
 }
 
@@ -200,7 +278,7 @@ function rightClick(html_cell) {
 function updateCell(cell) {
     var element = document.getElementById(cell.id);
 
-    if (cell.neadbyBombCount > 0){
+    if (cell.neadbyBombCount > 0) {
         element.querySelector('#cell-0_0-bomb').innerHTML = cell.neadbyBombCount;
     } else {
         element.querySelector('#cell-0_0-bomb').innerHTML = "";
@@ -267,8 +345,8 @@ function placeNumbers() {
             if (array[i][j].bomb === false) {
                 for (x = -1; x < 2; x++) {
                     for (y = -1; y < 2; y++) {
-                        if (i === 0 || i === array.length-1 ||
-                            j === 0 || j === array[i].length-1){
+                        if (i === 0 || i === array.length - 1 ||
+                            j === 0 || j === array[i].length - 1) {
                             continue;
                         }
 
@@ -291,6 +369,7 @@ function generateTable(tableWidth, tableHeight, bombNumber) {
     isGameOver = false;
     document.querySelector("#face").innerHTML = iconHappyFace;
     tableBombCount = bombNumber;
+    cellsToClickUntilWin = tableWidth * tableHeight - bombNumber;
 
     //reset time if started before
     firstClick = true;
@@ -369,10 +448,11 @@ function hardFieldShow() {
     generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
 }
 
-function clickFace(){
-    if (tableBombCount === EASY_BOMB_NUMBER){
+// click event for the face icon
+function clickFace() {
+    if (tableBombCount === EASY_BOMB_NUMBER) {
         easyFieldShow();
-    } else if (tableBombCount === HARD_BOMB_NUMBER){
+    } else if (tableBombCount === HARD_BOMB_NUMBER) {
         hardFieldShow();
     }
 }
