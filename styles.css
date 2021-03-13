@@ -51,7 +51,8 @@ header {
 .header-content .flag-icon{
     font-style: italic;
     color: var(--primary-color);
-    margin-right: 12px
+    margin-right: 12px;
+    text-shadow: 1px 1px 4px #ffffff9e;
 }
 
 #seconds, #minutes, #colon, #bomb_count{
@@ -137,6 +138,7 @@ header {
     align-items: center;
     color: var(--primary-color);
     font-style: italic!important;
+    text-shadow: 2px 1px 5px white;
 }
 
 .data{

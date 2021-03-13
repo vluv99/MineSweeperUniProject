@@ -102,12 +102,11 @@ function changeFace(html_cell) {
     }
 }
 
-
 // Gives the cell the class to animate when clicked
 function clickCell(html_cell) {
 
     // disable clicks if game is over
-    if (isGameOver === true){
+    if (isGameOver === true) {
         return;
     }
 
@@ -125,7 +124,7 @@ function clickCell(html_cell) {
                 cell = array[i][j];
 
                 // nothing happens if cell has been already clicked before
-                if (cell.hidden === false){
+                if (cell.hidden === false) {
                     return;
                 }
 
@@ -147,7 +146,6 @@ function clickCell(html_cell) {
         gameEnd(true);
     }
 }
-
 
 // Right click, flag placing function
 function rightClick(html_cell) {
@@ -194,7 +192,13 @@ function rightClick(html_cell) {
 function updateCell(cell) {
     var element = document.getElementById(cell.id);
 
-    if (isGameOver === true){
+    if (cell.neadbyBombCount > 0){
+        element.querySelector('#cell-0_0-bomb').innerHTML = cell.neadbyBombCount;
+    } else {
+        element.querySelector('#cell-0_0-bomb').innerHTML = "";
+    }
+
+    if (isGameOver === true) {
         element.querySelector("#cell-0_0-cover").classList.add("disableCellClick");
     }
 
@@ -214,6 +218,7 @@ function updateCell(cell) {
     } else {
         element.querySelector("#cell-0_0-cover").innerHTML = "";
     }
+
 }
 
 // function to place randomized bombs on the game field
@@ -241,6 +246,33 @@ function placeBombs(bombNumber, width, height) {
         let element = document.getElementById('cell-0_0');
 
         bombNumber--;
+    }
+}
+
+// function to place the numbers to match the bombs
+function placeNumbers() {
+
+    for (i = 0; i < array.length; i++) {
+        for (j = 0; j < array[i].length; j++) {
+            let num = 0;
+
+            if (array[i][j].bomb === false) {
+                for (x = -1; x < 2; x++) {
+                    for (y = -1; y < 2; y++) {
+                        if (i === 0 || i === array.length-1 ||
+                            j === 0 || j === array[i].length-1){
+                            continue;
+                        }
+
+                        if (array[i + x][j + y].bomb === true) {
+                            num++;
+                        }
+                    }
+                }
+
+                array[i][j].neadbyBombCount = num;
+            }
+        }
     }
 }
 
@@ -284,9 +316,13 @@ function generateTable(tableWidth, tableHeight, bombNumber) {
     // Generate bombs onto the table
     placeBombs(bombNumber, tableWidth, tableHeight);
 
+    // Generate numbers onto the table
+    placeNumbers();
+
     drawTable(array);
 }
 
+// the actual function to clone the templates according to the array
 function drawTable(array) {
 
     for (let x = 0; x < array.length; x++) {
