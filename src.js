@@ -14,6 +14,7 @@ var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
 var array, bombArray;
 var bombCountRightClick;
+var tableBombCount;
 
 var iconFlag = '<i class="fab fa-font-awesome-flag flag-icon"></i>';
 var iconBomb = '<i class="fas fa-bomb"></i>';
@@ -76,6 +77,7 @@ function gameEnd(isLost) {
     } else {
         // if the player won
         // TODO: figure out something fun + popup for the list + check list
+
     }
 
     // stop the time
@@ -288,6 +290,7 @@ function generateTable(tableWidth, tableHeight, bombNumber) {
     document.getElementById('table').innerHTML = "";
     isGameOver = false;
     document.querySelector("#face").innerHTML = iconHappyFace;
+    tableBombCount = bombNumber;
 
     //reset time if started before
     firstClick = true;
@@ -364,4 +367,12 @@ function hardFieldShow() {
 
     //console.log("Generated table HARD:")
     generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
+}
+
+function clickFace(){
+    if (tableBombCount === EASY_BOMB_NUMBER){
+        easyFieldShow();
+    } else if (tableBombCount === HARD_BOMB_NUMBER){
+        hardFieldShow();
+    }
 }
