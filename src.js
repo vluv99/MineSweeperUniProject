@@ -105,6 +105,7 @@ function changeFace(html_cell) {
     }
 }
 
+//not used
 function cellsDisappearing(html_cell) {
     let countDisappearingCells = 0;
     let cell;
@@ -113,7 +114,7 @@ function cellsDisappearing(html_cell) {
         for (j = 0; j < array[i].length; j++) {
 
             // find clicked cell
-            if (array[i][j].id === html_cell.id){
+            if (array[i][j].id === html_cell.id) {
                 cell = array[i][j];
             }
 
@@ -125,27 +126,27 @@ function cellsDisappearing(html_cell) {
 
                     if (array[i + x][j + y].bomb === false) {
                         // if ity empty add and animate
-                        if (array[i + x][j + y].neadbyBombCount === 0 || array[i - x][j - y].neadbyBombCount === 0){
+                        if (array[i + x][j + y].neadbyBombCount === 0 || array[i - x][j - y].neadbyBombCount === 0) {
                             // check if plus the original cell is empty
-                            if (array[i + x][j + y].neadbyBombCount === 0){
+                            if (array[i + x][j + y].neadbyBombCount === 0) {
                                 countDisappearingCells++;
                                 array[i + x][j + y].hidden = false;
                             }
 
                             // check if minus the original cell is empty
-                            if (array[i - x][j - y].neadbyBombCount === 0){
+                            if (array[i - x][j - y].neadbyBombCount === 0) {
                                 countDisappearingCells++;
                                 array[i - x][j - y].hidden = false;
                             }
 
                         } // if it has a number add and animate but dont continue that loop
-                        else if (array[i + x][j + y].neadbyBombCount > 0 || array[i - x][j - y].neadbyBombCount > 0){
+                        else if (array[i + x][j + y].neadbyBombCount > 0 || array[i - x][j - y].neadbyBombCount > 0) {
 
                             // check if plus the original cell has number
-                            if (array[i + x][j + y].neadbyBombCount > 0){
+                            if (array[i + x][j + y].neadbyBombCount > 0) {
 
                                 //check if its the fist number in that direction
-                                if (lastContinue === false){
+                                if (lastContinue === false) {
                                     countDisappearingCells++;
                                     array[i + x][j + y].hidden = false;
                                     lastContinue = true;
@@ -153,10 +154,10 @@ function cellsDisappearing(html_cell) {
                             }
 
                             // check if minus the original cell has number
-                            if (array[i - x][j - y].neadbyBombCount > 0){
+                            if (array[i - x][j - y].neadbyBombCount > 0) {
 
                                 //check if its the fist number in that direction
-                                if (firstContinue === false){
+                                if (firstContinue === false) {
                                     countDisappearingCells++;
                                     array[i - x][j - y].hidden = false;
                                     firstContinue = true;
@@ -171,6 +172,39 @@ function cellsDisappearing(html_cell) {
     }
 
     cellsToClickUntilWin -= countDisappearingCells;
+}
+
+function floodFill(cell, x, y) {
+    if (cell.hidden === false || cell.bomb === true || cell.flag === true){
+        return;
+    }
+
+    cell.hidden = false;
+    updateCell(cell);
+
+    if (cell.neadbyBombCount > 0){
+        return;
+    }
+
+    // go down
+    if (array[x+1]) {
+        floodFill(array[x + 1][y], x + 1, y);
+    }
+
+    // go up
+    if (array[x-1]) {
+        floodFill(array[x - 1][y], x - 1, y);
+    }
+
+    // go left
+    if (array[x][y-1]) {
+        floodFill(array[x][y - 1], x, y - 1);
+    }
+
+    // go right
+    if (array[x][y+1]) {
+        floodFill(array[x][y + 1], x, y + 1);
+    }
 }
 
 // Gives the cell the class to animate when clicked
@@ -207,8 +241,8 @@ function clickCell(html_cell) {
 
                 //cellsToClickUntilWin--; //TODO: if theres more than one cell disappears!!!
                 //cell.hidden = false;
-                cellsDisappearing(html_cell);
-                updateCell(cell);
+                //cellsDisappearing(html_cell);
+                floodFill(cell, i, j);
             }
         }
     }
@@ -228,13 +262,17 @@ function clickCell(html_cell) {
         if (cellsToClickUntilWin === 0) {
             gameEnd(false);
         } else {
-            cellsDisappearing(html_cell);
+            //cellsDisappearing(html_cell);
         }
     }
 }
 
 // Right click, flag placing function
 function rightClick(html_cell) {
+    if (isGameOver){
+        return;
+    }
+
     let bombCountHeader = parseInt(document.getElementById('bomb_count').innerText);
 
     if (bombCountHeader === HARD_BOMB_NUMBER) {
@@ -345,8 +383,8 @@ function placeNumbers() {
             if (array[i][j].bomb === false) {
                 for (x = -1; x < 2; x++) {
                     for (y = -1; y < 2; y++) {
-                        if (i === 0 || i === array.length - 1 ||
-                            j === 0 || j === array[i].length - 1) {
+                        if (i+x < 0 || i+x > array.length - 1 ||
+                            j+y < 0 || j+y > array[i].length - 1) {
                             continue;
                         }
 
