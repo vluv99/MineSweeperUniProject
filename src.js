@@ -7,6 +7,8 @@ var totalSeconds = 0;
 var firstClick = true;
 var setTimeVar = false;
 
+var isGameOver = false;
+
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
@@ -55,21 +57,25 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 }
 
 function gameEnd(isLost) {
+    isGameOver = true;
+    let cell;
+
     // if the player lost
     if (isLost === true) {
         for (i = 0; i < array.length; i++) {
             for (j = 0; j < array[i].length; j++) {
                 if (array[i][j].bomb === true) {
+                    cell = array[i][j];
 
                     // uncover all the bombs
-                    array[i][j].hidden = false;
-                    updateCell(array[i][j]);
+                    cell.hidden = false;
+                    updateCell(cell);
                 }
             }
         }
     } else {
         // if the player won
-        // TODO: figure out something fun + popup for the list
+        // TODO: figure out something fun + popup for the list + check list
     }
 
     // stop the time
@@ -99,6 +105,13 @@ function changeFace(html_cell) {
 
 // Gives the cell the class to animate when clicked
 function clickCell(html_cell) {
+
+    // disable clicks if game is over
+    if (isGameOver === true){
+        return;
+    }
+
+    // set variables to start timer if its the first click
     if (firstClick) {
         setTimeVar = true;
         firstClick = false;
@@ -110,6 +123,12 @@ function clickCell(html_cell) {
         for (j = 0; j < array[i].length; j++) {
             if (array[i][j].id === html_cell.id && array[i][j].flag === false) {
                 cell = array[i][j];
+
+                // nothing happens if cell has been already clicked before
+                if (cell.hidden === false){
+                    return;
+                }
+
                 cell.hidden = false;
                 updateCell(cell);
             }
@@ -125,7 +144,7 @@ function clickCell(html_cell) {
         }, 300);
     } else {
         changeFace(html_cell);
-        gameEnd();
+        gameEnd(true);
     }
 }
 
@@ -174,6 +193,10 @@ function rightClick(html_cell) {
 
 function updateCell(cell) {
     var element = document.getElementById(cell.id);
+
+    if (isGameOver === true){
+        element.querySelector("#cell-0_0-cover").classList.add("disableCellClick");
+    }
 
     // add class to cell for disappearing animation
     if (cell.hidden === false) {
@@ -224,6 +247,8 @@ function placeBombs(bombNumber, width, height) {
 function generateTable(tableWidth, tableHeight, bombNumber) {
     // Clean field area
     document.getElementById('table').innerHTML = "";
+    isGameOver = false;
+    document.querySelector("#face").innerHTML = iconHappyFace;
 
     //reset time if started before
     firstClick = true;
