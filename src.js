@@ -120,7 +120,13 @@ function clickCell(html_cell) {
 
     for (i = 0; i < array.length; i++) {
         for (j = 0; j < array[i].length; j++) {
-            if (array[i][j].id === html_cell.id && array[i][j].flag === false) {
+
+            //check if theres no flag on the cell
+            if (array[i][j].flag === true && array[i][j].id === html_cell.id){
+                return;
+            }
+
+            if (array[i][j].id === html_cell.id) {
                 cell = array[i][j];
 
                 // nothing happens if cell has been already clicked before
