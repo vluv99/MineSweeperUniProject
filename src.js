@@ -11,6 +11,7 @@ var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
 var array, bombArray;
+var bombCountRightClick;
 
 var iconFlag = '<i class="fab fa-font-awesome-flag flag-icon"></i>';
 var iconBomb = '<i class="fas fa-bomb"></i>';
@@ -65,9 +66,9 @@ function clickCell(html_cell) {
         firstClick = false;
     }
 
-    for (i = 0; i < array.length; i++){
-        for (j = 0; j < array[i].length; j++){
-            if (array[i][j].id === html_cell.id && array[i][j].flag === false){
+    for (i = 0; i < array.length; i++) {
+        for (j = 0; j < array[i].length; j++) {
+            if (array[i][j].id === html_cell.id && array[i][j].flag === false) {
                 array[i][j].hidden = false;
                 updateCell(array[i][j]);
             }
@@ -91,26 +92,41 @@ function clickCell(html_cell) {
 
 // Right click, flag placing function
 function rightClick(html_cell) {
-    // Check if its empty
-    /*if (e.querySelector("#cell-0_0-cover").innerHTML === "") {
-        e.querySelector("#cell-0_0-cover").innerHTML = '<i class="fab fa-font-awesome-flag flag-cell"></i>';
-        if (document.getElementById('bomb_count').innerText === "40") {
-            HARD_BOMB_NUMBER--;
-            document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + HARD_BOMB_NUMBER.toString();
-        } else if (document.getElementById('bomb_count').innerText === "10") {
-            EASY_BOMB_NUMBER--;
-            document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + EASY_BOMB_NUMBER.toString();
-        }
-    } else {
-        e.querySelector("#cell-0_0-cover").innerHTML = "";
-    }*/
+    let bombCountHeader = parseInt(document.getElementById('bomb_count').innerText);
 
-    for (i = 0; i < array.length; i++){
-        for (j = 0; j < array[i].length; j++){
-            if (array[i][j].id === html_cell.id && array[i][j].hidden === true){
+    if (bombCountHeader === HARD_BOMB_NUMBER){
+        bombCountRightClick = HARD_BOMB_NUMBER;
+    } else if (bombCountHeader === EASY_BOMB_NUMBER){
+        bombCountRightClick = EASY_BOMB_NUMBER;
+    }
+
+    for (i = 0; i < array.length; i++) {
+        for (j = 0; j < array[i].length; j++) {
+            if (array[i][j].id === html_cell.id && array[i][j].hidden === true) {
+
+                // don't place any flags if there is none left
+                if (bombCountHeader === 0 && array[i][j].flag === false){
+                    return;
+                }
+
                 // reverse the flag state
                 array[i][j].flag = !array[i][j].flag;
                 updateCell(array[i][j]);
+
+                // update flag counter
+                if (array[i][j].flag === true){
+                    if (bombCountHeader === bombCountRightClick){
+                        bombCountHeader--;
+                        bombCountRightClick--;
+                        document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombCountHeader;
+                    }
+                } else {
+                    if (bombCountHeader === bombCountRightClick){
+                        bombCountHeader++;
+                        bombCountRightClick++;
+                        document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombCountHeader;
+                    }
+                }
             }
         }
     }
