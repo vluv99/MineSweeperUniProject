@@ -17,6 +17,7 @@ var iconFlag = '<i class="fab fa-font-awesome-flag flag-icon"></i>';
 var iconBomb = '<i class="fas fa-bomb"></i>';
 var iconHappyFace = '<i class="far fa-laugh-beam"></i>';
 var iconSurpriseFace = '<i class="far fa-surprise"></i>';
+var iconDeadFace = '<i class="far fa-dizzy"></i>';
 
 // Default field appears
 easyFieldShow();
@@ -53,11 +54,48 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
     document.querySelector(parentSelector).appendChild(clone);
 }
 
-function changeFace(lose) {
-    if (lose === false) {
+function gameEnd(isLost) {
+    // if the player lost
+    if (isLost === true) {
+        for (i = 0; i < array.length; i++) {
+            for (j = 0; j < array[i].length; j++) {
+                if (array[i][j].bomb === true) {
+
+                    // uncover all the bombs
+                    array[i][j].hidden = false;
+                    updateCell(array[i][j]);
+                }
+            }
+        }
+    } else {
+        // if the player won
+        // TODO: figure out something fun + popup for the list
+    }
+
+    // stop the time
+    setTimeVar = false;
+}
+
+function changeFace(html_cell) {
+    let isLost;
+
+    for (i = 0; i < array.length; i++) {
+        for (j = 0; j < array[i].length; j++) {
+            if (array[i][j].id === html_cell.id) {
+                isLost = array[i][j].bomb;
+            }
+        }
+    }
+
+    if (isLost === false) {
+        // if not bomb, change face to surprised
         document.querySelector("#face").innerHTML = iconHappyFace;
+    } else if (isLost === true) {
+        // if bomb, change face to dead
+        document.querySelector("#face").innerHTML = iconDeadFace;
     }
 }
+
 
 // Gives the cell the class to animate when clicked
 function clickCell(html_cell) {
@@ -66,37 +104,39 @@ function clickCell(html_cell) {
         firstClick = false;
     }
 
+    let cell;
+
     for (i = 0; i < array.length; i++) {
         for (j = 0; j < array[i].length; j++) {
             if (array[i][j].id === html_cell.id && array[i][j].flag === false) {
-                array[i][j].hidden = false;
-                updateCell(array[i][j]);
+                cell = array[i][j];
+                cell.hidden = false;
+                updateCell(cell);
             }
         }
     }
 
-    // Only disappear if there is no flag on the cell
-    /*if (cell.querySelector("#cell-0_0-cover").innerHTML === "") {
-        cell.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
-    } else if (cell.querySelector("#cell-0_0-cover").innerHTML === iconFlag) {
-        //nothing happens
-    }*/
-
-    // TODO: make face change for click event
+    // change for click event
+    // check if player lost yet
     document.querySelector("#face").innerHTML = iconSurpriseFace;
-    //setInterval(changeFace(false), 100000);
-
-    /*document.querySelector("#face").innerHTML = '<i class="far fa-laugh-beam"></i>';
-    <i class="far fa-dizzy"></i>*/
+    if (cell.bomb === false) {
+        setTimeout(function () {
+            changeFace(html_cell);
+        }, 300);
+    } else {
+        changeFace(html_cell);
+        gameEnd();
+    }
 }
+
 
 // Right click, flag placing function
 function rightClick(html_cell) {
     let bombCountHeader = parseInt(document.getElementById('bomb_count').innerText);
 
-    if (bombCountHeader === HARD_BOMB_NUMBER){
+    if (bombCountHeader === HARD_BOMB_NUMBER) {
         bombCountRightClick = HARD_BOMB_NUMBER;
-    } else if (bombCountHeader === EASY_BOMB_NUMBER){
+    } else if (bombCountHeader === EASY_BOMB_NUMBER) {
         bombCountRightClick = EASY_BOMB_NUMBER;
     }
 
@@ -105,7 +145,7 @@ function rightClick(html_cell) {
             if (array[i][j].id === html_cell.id && array[i][j].hidden === true) {
 
                 // don't place any flags if there is none left
-                if (bombCountHeader === 0 && array[i][j].flag === false){
+                if (bombCountHeader === 0 && array[i][j].flag === false) {
                     return;
                 }
 
@@ -114,14 +154,14 @@ function rightClick(html_cell) {
                 updateCell(array[i][j]);
 
                 // update flag counter
-                if (array[i][j].flag === true){
-                    if (bombCountHeader === bombCountRightClick){
+                if (array[i][j].flag === true) {
+                    if (bombCountHeader === bombCountRightClick) {
                         bombCountHeader--;
                         bombCountRightClick--;
                         document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombCountHeader;
                     }
                 } else {
-                    if (bombCountHeader === bombCountRightClick){
+                    if (bombCountHeader === bombCountRightClick) {
                         bombCountHeader++;
                         bombCountRightClick++;
                         document.getElementById('bomb_count').innerHTML = '<i class="fab fa-font-awesome-flag flag-icon"></i>' + bombCountHeader;
@@ -204,7 +244,13 @@ function generateTable(tableWidth, tableHeight, bombNumber) {
         //cloneElement('#template-row', '#cell-row-0', 'cell-row-' + i, '.table');
 
         for (j = 0; j < tableWidth; j++) { //cells
-            array[i][j] = {flag: false, bomb: false, neadbyBombCount: 0, hidden: true, id: 'cell_' + i + '-' + j}
+            array[i][j] = {
+                flag: false,
+                bomb: false,
+                neadbyBombCount: 0,
+                hidden: true,
+                id: 'cell_' + i + '-' + j
+            }
             //cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
         }
     }
