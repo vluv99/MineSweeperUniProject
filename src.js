@@ -219,10 +219,10 @@ function updateCell(cell) {
 // function to place randomized bombs on the game field
 function placeBombs(bombNumber, width, height) {
     var randX, randY;
-    var cellId;
     bombArray = [];
 
-    //console.log("Bomb cell ids:")
+    console.clear();
+    console.log("Bomb cell ids:")
 
     while (bombNumber >= 1) {
 
@@ -234,9 +234,10 @@ function placeBombs(bombNumber, width, height) {
             randX = Math.floor(Math.random() * width);
             randY = Math.floor(Math.random() * height);
         }
-        bombArray.push(randY + "-" + randX);
+        bombArray.push(randX + "-" + randY);
 
         array[randY][randX].bomb = true;
+        console.log(bombNumber + ". " + array[randY][randX].id);
         let element = document.getElementById('cell-0_0');
 
         bombNumber--;
