@@ -213,3 +213,95 @@ header {
 .disableCellClick{
     pointer-events: none;
 }
+
+@media screen and (max-width: 700px){
+    .popup{
+        min-width : 35%;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    /*visibility: hidden;
+    opacity: 1;*/
+    z-index: 15;
+}
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup {
+    margin: 70px auto;
+    padding: 20px;
+    background: var(--background-color);
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+    margin-top: 0;
+    color: var(--text-on-background);
+    font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+.popup .close:hover {
+    color: var(--primary-color);
+}
+.popup .content {
+    max-height: 30%;
+    overflow: auto;
+    display: flex;
+    flex-flow: column;
+}
+
+.popup_button{
+    padding: 3px 5px;
+    color: var(--text-on-background);
+    background-color: var(--highlight-dp12);
+    border-radius: 2px;
+    border: none;
+    width: 35px;
+    margin-top: 10px;
+    align-self: center;
+    outline: none;
+}
+
+.popup_button:hover{
+    background-color: var(--primary-color);
+}
+
+label{
+    font-size: medium;
+}
+
+.popup_input{
+    align-self: center;
+    outline: none;
+    margin-top: 15px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 90%;
+    border-radius: 2px;
+    border: none;
+}

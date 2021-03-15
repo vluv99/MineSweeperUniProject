@@ -77,6 +77,8 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 function gameEnd(isLost) {
     isGameOver = true;
     let cell;
+    document.getElementById('popup1').hidden = false;
+
 
     // if the player lost
     if (isLost === true) {
@@ -95,6 +97,8 @@ function gameEnd(isLost) {
         // if the player won
         // TODO: figure out something fun + popup for the list + check list
 
+        //pop up
+        //document.getElementById('popup1').hidden = false;
     }
 
     // stop the time
@@ -119,6 +123,11 @@ function changeFace(html_cell) {
         // if bomb, change face to dead
         document.querySelector("#face").innerHTML = iconDeadFace;
     }
+}
+
+// function to close the pop up when X is clicked
+function closePopUp(){
+    document.getElementById('popup1').hidden = true;
 }
 
 //not used
@@ -197,7 +206,7 @@ function floodFill(cell, x, y) {
     }
 
     cell.hidden = false;
-    clickSound.play();
+    //clickSound.play();
     cellsToClickUntilWin--;
     updateCell(cell);
 
@@ -241,7 +250,7 @@ function clickCell(html_cell) {
     }
 
     let cell;
-    clickSound = sound("assets/Plop_sound.ogg");
+    //clickSound = sound("assets/Plop_sound.ogg");
 
     for (i = 0; i < array.length; i++) {
         for (j = 0; j < array[i].length; j++) {
@@ -497,6 +506,10 @@ function drawTable(array) {
             updateCell(cell);
         }
     }
+}
+
+function generateRangList(hardness){
+
 }
 
 // Small field
