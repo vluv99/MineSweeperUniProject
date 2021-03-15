@@ -9,6 +9,7 @@ var setTimeVar = false;
 
 var isGameOver = false;
 var cellsToClickUntilWin;
+var clickSound;
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
@@ -45,6 +46,21 @@ function pad(val) {
         return "0" + valString;
     } else {
         return valString;
+    }
+}
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
     }
 }
 
@@ -181,6 +197,7 @@ function floodFill(cell, x, y) {
     }
 
     cell.hidden = false;
+    clickSound.play();
     cellsToClickUntilWin--;
     updateCell(cell);
 
@@ -224,6 +241,7 @@ function clickCell(html_cell) {
     }
 
     let cell;
+    clickSound = sound("assets/Plop_sound.ogg");
 
     for (i = 0; i < array.length; i++) {
         for (j = 0; j < array[i].length; j++) {
@@ -507,3 +525,5 @@ function clickFace() {
         hardFieldShow();
     }
 }
+
+
