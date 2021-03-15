@@ -9,6 +9,7 @@ var setTimeVar = false;
 
 var isGameOver = false;
 var cellsToClickUntilWin;
+let countDisappearingCells = 0;
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
@@ -180,6 +181,7 @@ function floodFill(cell, x, y) {
     }
 
     cell.hidden = false;
+    cellsToClickUntilWin--;
     updateCell(cell);
 
     if (cell.neadbyBombCount > 0){
