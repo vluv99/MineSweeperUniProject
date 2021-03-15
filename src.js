@@ -77,8 +77,9 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 function gameEnd(isLost) {
     isGameOver = true;
     let cell;
-    document.getElementById('popup1').hidden = false;
 
+    //TODO: delete this, once the testing is over for the list and popup
+    document.getElementById('popup1').hidden = false;
 
     // if the player lost
     if (isLost === true) {
