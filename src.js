@@ -9,7 +9,6 @@ var setTimeVar = false;
 
 var isGameOver = false;
 var cellsToClickUntilWin;
-let countDisappearingCells = 0;
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
@@ -175,6 +174,7 @@ function cellsDisappearing(html_cell) {
     cellsToClickUntilWin -= countDisappearingCells;
 }
 
+// algorithm for mass checking nearby cells
 function floodFill(cell, x, y) {
     if (cell.hidden === false || cell.bomb === true || cell.flag === true){
         return;
@@ -249,11 +249,11 @@ function clickCell(html_cell) {
         }
     }
 
-    // change for click event
-    // check if player lost yet
+    // change for click event, check if player lost yet
     document.querySelector("#face").innerHTML = iconSurpriseFace;
     if (cell.bomb !== false) {
         changeFace(html_cell);
+        cell.gameEndingExplosionCell = true;
         gameEnd(true);
     } else {
         // header change face action
@@ -331,6 +331,16 @@ function updateCell(cell) {
     // add class to cell for disappearing animation
     if (cell.hidden === false) {
         element.querySelector("#cell-0_0-cover").classList.add("cell-cover__hidden");
+    }
+
+    // add class to cell that ended the game
+    if (cell.gameEndingExplosionCell === true){
+        element.querySelector("#cell-0_0-bomb").classList.add("cell-bomb_losing_cell");
+    }
+
+    // add class to cells where bombs had flag on them
+    if(cell.bomb === true && cell.flag === true && isGameOver === true){
+        element.querySelector("#cell-0_0-bomb").classList.add("cell-bomb_flag_bomb");
     }
 
     // place bombs in cell
@@ -435,7 +445,8 @@ function generateTable(tableWidth, tableHeight, bombNumber) {
                 bomb: false,
                 neadbyBombCount: 0,
                 hidden: true,
-                id: 'cell_' + i + '-' + j
+                id: 'cell_' + i + '-' + j,
+                gameEndingExplosionCell: false
             }
             //cloneElement('#template-cell', '#cell-0_0', 'cell_' + i + '-' + j, '#cell-row-' + i);
         }

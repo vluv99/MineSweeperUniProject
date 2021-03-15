@@ -117,6 +117,14 @@ header {
     animation-fill-mode: forwards;
 }
 
+.cell-bomb_flag_bomb{
+    color: var(--primary-color);
+}
+
+.cell-bomb_losing_cell{
+    background-color: var(--primary-color);
+}
+
 .bomb-cell{
     position: absolute;
     top: 0;
