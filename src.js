@@ -11,6 +11,9 @@ var isGameOver = false;
 var cellsToClickUntilWin;
 var clickSound;
 
+var easy_localStorage = [];
+var hard_localStorage = [];
+
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
 var tableWidth, tableHeight;
@@ -97,6 +100,19 @@ function gameEnd(isLost) {
     } else {
         // if the player won
         // TODO: figure out something fun + popup for the list + check list
+
+        //check which field the player played
+        if(true){
+            //if the time is better than any of the ones in the arrays
+            if (true){
+
+                // Retrieve the object from storage
+                var retrievedObject = localStorage.getItem('easy_localStorage');
+
+                console.log('retrievedObject: ', JSON.parse(retrievedObject));
+            }
+
+        }
 
         //pop up
         //document.getElementById('popup1').hidden = false;
@@ -509,8 +525,30 @@ function drawTable(array) {
     }
 }
 
-function generateRangList(hardness){
+function generateRangList(){
+    easy_localStorage = {
+        rank: -1,
+        name: "",
+        time: ""
+    }
 
+    hard_localStorage = {
+        rank: -1,
+        name: "",
+        time: ""
+    }
+
+    // Put the object into storage
+    localStorage.setItem('easy_localStorage', JSON.stringify(easy_localStorage));
+    localStorage.setItem('hard_localStorage', JSON.stringify(hard_localStorage));
+
+
+    drawRankList();
+}
+
+function drawRankList(){
+
+    //TODO: do the template shit for the list
 }
 
 // Small field
