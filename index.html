@@ -36,15 +36,25 @@
 </div>
 
 <div hidden id="popup1" class="overlay">
-    <div class="popup">
+    <div class="popup" id="popup_container">
         <h2>You Won!</h2>
-        <a class="close" onclick="closePopUp()">&times;</a>
+        <a class="close" id="popup_close" onclick="closePopUp(this)">&times;</a>
         <div class="content">
             <label>
                 <div>You managed to acquire place on the ranklist.</div>
                 <input class="popup_input" type="text" placeholder="Your username">
             </label>
             <input class="popup_button" type="button" value="OK"/>
+        </div>
+    </div>
+</div>
+
+<div hidden id="ranklist_popup" class="overlay">
+    <div class="popup">
+        <h2>Ranklist:</h2>
+        <a class="close" onclick="closePopUp(this)">&times;</a>
+        <div class="content">
+            asdasdasdasd
         </div>
     </div>
 </div>
@@ -62,6 +72,7 @@
     <div>
         <p>Best scores:</p>
         <!-- template here -->
+        <p class="button" id="ranklist_button" onclick="ranklistShow()">Ranklist</p>
 
         <!--
         <div class="list-row">

@@ -142,11 +142,6 @@ function changeFace(html_cell) {
     }
 }
 
-// function to close the pop up when X is clicked
-function closePopUp(){
-    document.getElementById('popup1').hidden = true;
-}
-
 //not used
 function cellsDisappearing(html_cell) {
     let countDisappearingCells = 0;
@@ -578,4 +573,16 @@ function clickFace() {
     }
 }
 
+function ranklistShow(){
+    document.getElementById('ranklist_popup').hidden = false;
+}
 
+// function to close the pop up when X is clicked
+function closePopUp(element){
+    var parents = ("#element.id").parents();
+    for (i = 0; i < parents.length; i++){
+        console.log(parents[i]);
+    }
+
+    document.getElementById(parents.id).hidden = true;
+}
