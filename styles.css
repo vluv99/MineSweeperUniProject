@@ -201,7 +201,7 @@ header {
     border: none;
 }
 
-.button_tab:focus{
+.button_tab:focus, .button_tab.active{
     outline: none;
     transform: translateY(2px);
     box-shadow: 1px 1px 3px -1px red;

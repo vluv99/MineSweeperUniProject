@@ -521,8 +521,8 @@ function drawTable(array) {
     }
 }
 
-generateRangList();
-function generateRangList(){
+loadRangList();
+function loadRangList(){
     easy_localStorage[0] = {
         rank: -1,
         name: "",
@@ -544,7 +544,7 @@ function generateRangList(){
 
 function drawRankList(){
 
-    //TODO: do the template shit for the list
+    //for (i = 0; i < )
 }
 
 // Small field
@@ -580,8 +580,11 @@ function clickFace() {
 function ranklistShow(){
     document.getElementById('ranklist_popup').hidden = false;
 
-    document.getElementById(GAME_HARDNESS + '_list').hidden = false;
-    document.getElementById(GAME_HARDNESS + '_tab_button').classList.add("active");
+    /*document.getElementById(GAME_HARDNESS + '_list').hidden = false;
+    document.getElementById(GAME_HARDNESS + '_tab_button').classList.add("active");*/
+
+    // default tab link set
+    document.getElementById(GAME_HARDNESS + '_tab_button').click();
 
 }
 
@@ -590,19 +593,23 @@ function closePopUp(string){
     document.getElementById(string).hidden = true;
 }
 
+// it displayes the content of the wanted list
 function showList(evt, hardness){
     var i, tabcontent, tablinks;
 
+    // sets every tab content to hidden
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].hidden = true;
     }
 
+    // takes away the focus from the tablinks (buttons)
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
+    // add the focus to the button, adds the class to show the tabcontent
     document.getElementById(hardness + '_list').hidden = false;
     evt.currentTarget.className += " active";
 }
