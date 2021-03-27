@@ -16,6 +16,7 @@ var hard_localStorage = [];
 
 var HARD_BOMB_NUMBER = 40;
 var EASY_BOMB_NUMBER = 10;
+var GAME_HARDNESS;
 var tableWidth, tableHeight;
 var array, bombArray;
 var bombCountRightClick;
@@ -520,23 +521,23 @@ function drawTable(array) {
     }
 }
 
+generateRangList();
 function generateRangList(){
-    easy_localStorage = {
+    easy_localStorage[0] = {
         rank: -1,
         name: "",
-        time: ""
+        seconds: -1
     }
 
-    hard_localStorage = {
+    hard_localStorage[0] = {
         rank: -1,
         name: "",
-        time: ""
+        seconds: -1
     }
 
     // Put the object into storage
     localStorage.setItem('easy_localStorage', JSON.stringify(easy_localStorage));
     localStorage.setItem('hard_localStorage', JSON.stringify(hard_localStorage));
-
 
     drawRankList();
 }
@@ -550,6 +551,7 @@ function drawRankList(){
 function easyFieldShow() {
     tableHeight = 10;
     tableWidth = 10;
+    GAME_HARDNESS = "easy";
 
     //console.log("Generated table EASY:")
     generateTable(tableWidth, tableHeight, EASY_BOMB_NUMBER);
@@ -559,6 +561,7 @@ function easyFieldShow() {
 function hardFieldShow() {
     tableHeight = 15;
     tableWidth = 18;
+    GAME_HARDNESS = "hard";
 
     //console.log("Generated table HARD:")
     generateTable(tableWidth, tableHeight, HARD_BOMB_NUMBER)
@@ -573,16 +576,33 @@ function clickFace() {
     }
 }
 
+// button action to how rank list
 function ranklistShow(){
     document.getElementById('ranklist_popup').hidden = false;
+
+    document.getElementById(GAME_HARDNESS + '_list').hidden = false;
+    document.getElementById(GAME_HARDNESS + '_tab_button').classList.add("active");
+
 }
 
 // function to close the pop up when X is clicked
-function closePopUp(element){
-    var parents = ("#element.id").parents();
-    for (i = 0; i < parents.length; i++){
-        console.log(parents[i]);
+function closePopUp(string){
+    document.getElementById(string).hidden = true;
+}
+
+function showList(evt, hardness){
+    var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].hidden = true;
     }
 
-    document.getElementById(parents.id).hidden = true;
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    document.getElementById(hardness + '_list').hidden = false;
+    evt.currentTarget.className += " active";
 }

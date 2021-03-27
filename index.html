@@ -38,7 +38,7 @@
 <div hidden id="popup1" class="overlay">
     <div class="popup" id="popup_container">
         <h2>You Won!</h2>
-        <a class="close" id="popup_close" onclick="closePopUp(this)">&times;</a>
+        <a class="close" id="popup_close" onclick="closePopUp('popup1')">&times;</a>
         <div class="content">
             <label>
                 <div>You managed to acquire place on the ranklist.</div>
@@ -52,9 +52,21 @@
 <div hidden id="ranklist_popup" class="overlay">
     <div class="popup">
         <h2>Ranklist:</h2>
-        <a class="close" onclick="closePopUp(this)">&times;</a>
+        <a class="close" onclick="closePopUp('ranklist_popup')">&times;</a>
+        <div class="tab">
+            <button id="easy_tab_button" class="tablinks button button_tab" onclick="showList(event, GAME_HARDNESS)">Easy</button>
+            <button id="hard_tab_button" class="tablinks button button_tab" onclick="showList(event, GAME_HARDNESS)">Hard</button>
+        </div>
         <div class="content">
-            asdasdasdasd
+            <div hidden id="easy_list" class="tabcontent">
+                <h3>Easy:</h3>
+                <p>London is the capital city of England.</p>
+            </div>
+
+            <div hidden id="hard_list" class="tabcontent">
+                <h3>Hard:</h3>
+                <p>Paris is the capital of France.</p>
+            </div>
         </div>
     </div>
 </div>
