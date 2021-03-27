@@ -581,8 +581,7 @@ function drawTable(array) {
     }
 }
 
-loadRangList();
-
+// not used
 function loadRangList() {
     easy_localStorage = [
         {
