@@ -163,7 +163,6 @@ header {
     display: flex;
     flex-direction: row;
     /*justify-content: space-around;*/
-    width: 200px;
 }
 
 .list-middle{
@@ -191,6 +190,10 @@ header {
     cursor: pointer;
     user-select: none;
     border-radius: 5px;
+}
+
+.tab{
+    text-align: center;
 }
 
 .button_tab{

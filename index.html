@@ -42,9 +42,9 @@
         <div class="content">
             <label>
                 <div>You managed to acquire place on the ranklist.</div>
-                <input class="popup_input" type="text" placeholder="Your username">
+                <input id="nameInput" class="popup_input" type="text" placeholder="Your username">
             </label>
-            <input class="popup_button" type="button" value="OK"/>
+            <input class="popup_button" type="button" value="OK" onclick="submitResult()"/>
         </div>
     </div>
 </div>
@@ -54,36 +54,32 @@
         <h2>Ranklist:</h2>
         <a class="close" onclick="closePopUp('ranklist_popup')">&times;</a>
         <div class="tab">
-            <button id="easy_tab_button" class="tablinks button button_tab" onclick="showList(event, 'easy')">Easy</button>
-            <button id="hard_tab_button" class="tablinks button button_tab" onclick="showList(event, 'hard')">Hard</button>
+            <button id="easy_tab_button" class="tablinks button button_tab" onclick="showList(event, 'easy')">Easy
+            </button>
+            <button id="hard_tab_button" class="tablinks button button_tab" onclick="showList(event, 'hard')">Hard
+            </button>
         </div>
         <div class="content">
-            <div hidden id="easy_list" class="tabcontent">
-                <h3>Easy:</h3>
-                <!-- template here -->
-            </div>
-
-            <div hidden id="hard_list" class="tabcontent">
-                <h3>Hard:</h3>
-                <!-- template here -->
+            <div id="list-content" class="tabcontent">
+                <p>No result yet :(</p>
+                <!--template-->
             </div>
         </div>
     </div>
 </div>
 
-<template id="list-row">
-    <div class="list-row">
-        <div class="list-orderNumber"></div>
-        <div class="cut-text"></div>
+<template id="list-row-template">
+    <div class="list-row" id="list-row">
+        <div id="list-orderNumber" class="list-orderNumber"></div>
+        <div id="cut-text" class="cut-text"></div>
         <div class="list-middle">-</div>
-        <div></div>
+        <div id="time"></div>
     </div>
 </template>
 
 <div class="data">
     <div>
         <p>Best scores:</p>
-        <!-- template here -->
         <p class="button" id="ranklist_button" onclick="ranklistShow()">Ranklist</p>
 
         <!--

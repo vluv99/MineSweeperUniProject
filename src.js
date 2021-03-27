@@ -60,10 +60,10 @@ function sound(src) {
     this.sound.setAttribute("controls", "none");
     this.sound.style.display = "none";
     document.body.appendChild(this.sound);
-    this.play = function(){
+    this.play = function () {
         this.sound.play();
     }
-    this.stop = function(){
+    this.stop = function () {
         this.sound.pause();
     }
 }
@@ -81,6 +81,9 @@ function cloneElement(selector, innerSelector, idValue, parentSelector) {
 function gameEnd(isLost) {
     isGameOver = true;
     let cell;
+
+    // stop the time
+    setTimeVar = false;
 
     //TODO: delete this, once the testing is over for the list and popup
     document.getElementById('popup1').hidden = false;
@@ -102,25 +105,85 @@ function gameEnd(isLost) {
         // if the player won
         // TODO: figure out something fun + popup for the list + check list
 
-        //check which field the player played
-        if(true){
-            //if the time is better than any of the ones in the arrays
-            if (true){
-
-                // Retrieve the object from storage
-                var retrievedObject = localStorage.getItem('easy_localStorage');
-
-                console.log('retrievedObject: ', JSON.parse(retrievedObject));
-            }
-
+        // check wether the time is better than any of the ones in the arrays
+        if (checkScoreForRanklist(totalSeconds)){
+            document.getElementById('popup1').hidden = false;
         }
+
 
         //pop up
         //document.getElementById('popup1').hidden = false;
     }
+}
 
-    // stop the time
-    setTimeVar = false;
+function checkScoreForRanklist(seconds) {
+    var retrievedObject;
+
+    if (GAME_HARDNESS === 'easy'){
+        retrievedObject = JSON.parse(localStorage.getItem('easy_localStorage'));
+    } else if (GAME_HARDNESS === 'hard'){
+        retrievedObject = JSON.parse(localStorage.getItem('hard_localStorage'));
+    }
+
+    for (i = 0; retrievedObject.length; i++){
+        if (retrievedObject[i].seconds > seconds){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function storeScore(seconds, name){
+    var retrievedObject;
+
+    var newScore ={
+        rank: 0,
+        name: name,
+        seconds: seconds
+    }
+
+    if (GAME_HARDNESS === 'easy'){
+        retrievedObject = JSON.parse(localStorage.getItem('easy_localStorage'));
+    } else if (GAME_HARDNESS === 'hard'){
+        retrievedObject = JSON.parse(localStorage.getItem('hard_localStorage'));
+    }
+
+    var inserted = false;
+    for (i = 0; i < retrievedObject.length; i++){
+        if (retrievedObject[i].seconds > seconds && !inserted){
+            // calculate rank
+            newScore.rank = i+1;
+
+            // set new element into the array while keeping the old ones
+            retrievedObject.splice(i, 0, newScore);
+
+            inserted = true;
+        }else {
+            retrievedObject[i].rank = i+1;
+        }
+    }
+
+    if (retrievedObject.length > 10){
+        // remove last element if the array has more than 10
+        retrievedObject.splice(10, 1);
+    }
+
+    // update localstorage
+    if (GAME_HARDNESS === 'easy'){
+        localStorage.setItem('easy_localStorage', JSON.stringify(retrievedObject));
+    } else if (GAME_HARDNESS === 'hard'){
+        localStorage.setItem('hard_localStorage', JSON.stringify(retrievedObject));
+    }
+}
+
+function submitResult(){
+    var name = document.getElementById("nameInput").value;
+
+    storeScore(totalSeconds, name);
+
+    closePopUp('popup1');
+    ranklistShow();
 }
 
 function changeFace(html_cell) {
@@ -214,7 +277,7 @@ function cellsDisappearing(html_cell) {
 
 // algorithm for mass checking nearby cells
 function floodFill(cell, x, y) {
-    if (cell.hidden === false || cell.bomb === true || cell.flag === true){
+    if (cell.hidden === false || cell.bomb === true || cell.flag === true) {
         return;
     }
 
@@ -223,27 +286,27 @@ function floodFill(cell, x, y) {
     cellsToClickUntilWin--;
     updateCell(cell);
 
-    if (cell.neadbyBombCount > 0){
+    if (cell.neadbyBombCount > 0) {
         return;
     }
 
     // go down
-    if (array[x+1]) {
+    if (array[x + 1]) {
         floodFill(array[x + 1][y], x + 1, y);
     }
 
     // go up
-    if (array[x-1]) {
+    if (array[x - 1]) {
         floodFill(array[x - 1][y], x - 1, y);
     }
 
     // go left
-    if (array[x][y-1]) {
+    if (array[x][y - 1]) {
         floodFill(array[x][y - 1], x, y - 1);
     }
 
     // go right
-    if (array[x][y+1]) {
+    if (array[x][y + 1]) {
         floodFill(array[x][y + 1], x, y + 1);
     }
 }
@@ -311,7 +374,7 @@ function clickCell(html_cell) {
 
 // Right click, flag placing function
 function rightClick(html_cell) {
-    if (isGameOver){
+    if (isGameOver) {
         return;
     }
 
@@ -374,12 +437,12 @@ function updateCell(cell) {
     }
 
     // add class to cell that ended the game
-    if (cell.gameEndingExplosionCell === true){
+    if (cell.gameEndingExplosionCell === true) {
         element.querySelector("#cell-0_0-bomb").classList.add("cell-bomb_losing_cell");
     }
 
     // add class to cells where bombs had flag on them
-    if(cell.bomb === true && cell.flag === true && isGameOver === true){
+    if (cell.bomb === true && cell.flag === true && isGameOver === true) {
         element.querySelector("#cell-0_0-bomb").classList.add("cell-bomb_flag_bomb");
     }
 
@@ -435,8 +498,8 @@ function placeNumbers() {
             if (array[i][j].bomb === false) {
                 for (x = -1; x < 2; x++) {
                     for (y = -1; y < 2; y++) {
-                        if (i+x < 0 || i+x > array.length - 1 ||
-                            j+y < 0 || j+y > array[i].length - 1) {
+                        if (i + x < 0 || i + x > array.length - 1 ||
+                            j + y < 0 || j + y > array[i].length - 1) {
                             continue;
                         }
 
@@ -522,29 +585,94 @@ function drawTable(array) {
 }
 
 loadRangList();
-function loadRangList(){
-    easy_localStorage[0] = {
-        rank: -1,
-        name: "",
-        seconds: -1
-    }
+
+function loadRangList() {
+    easy_localStorage = [
+        {
+            rank: 1,
+            name: "kispista35",
+            seconds: 320
+        },
+        {
+            rank: 2,
+            name: "alibaba",
+            seconds: 328
+        },
+        {
+            rank: 3,
+            name: "voltegyszervalaha",
+            seconds: 485
+        },
+        {
+            rank: 4,
+            name: "iGotOnTheRankList",
+            seconds: 560
+        },
+        {
+            rank: 4,
+            name: "iGotOnTheRankList",
+            seconds: 560
+        },
+        {
+            rank: 4,
+            name: "iGotOnTheRankList",
+            seconds: 560
+        },
+        {
+            rank: 4,
+            name: "iGotOnTheRankList",
+            seconds: 560
+        },
+        {
+            rank: 4,
+            name: "iGotOnTheRankList",
+            seconds: 560
+        },
+        {
+            rank: 4,
+            name: "iGotOnTheRankList",
+            seconds: 560
+        }
+    ]
 
     hard_localStorage[0] = {
-        rank: -1,
-        name: "",
-        seconds: -1
+        rank: 1,
+        name: "kispista35",
+        seconds: 32
     }
 
     // Put the object into storage
     localStorage.setItem('easy_localStorage', JSON.stringify(easy_localStorage));
     localStorage.setItem('hard_localStorage', JSON.stringify(hard_localStorage));
-
-    drawRankList();
 }
 
-function drawRankList(){
+function drawRankList(hardness) {
+    var retrievedStorage;
 
-    //for (i = 0; i < )
+    if (hardness === 'easy') {
+        document.querySelector('.tabcontent').innerHTML = "<h3>Easy:</h3>\n" + "<!-- template here -->";
+
+        retrievedStorage = JSON.parse(localStorage.getItem('easy_localStorage'));
+    } else if (hardness === 'hard') {
+        document.querySelector('.tabcontent').innerHTML = "<h3>Hard:</h3>\n" + "<!-- template here -->";
+
+        retrievedStorage = JSON.parse(localStorage.getItem('hard_localStorage'));
+    }
+
+    for (i = 0; i < retrievedStorage.length; i++) {
+        cloneElement('#list-row-template', '#list-row', 'list-row-' + i, '.tabcontent');
+
+        var listOrder = document.getElementById('list-row-' + i);
+        listOrder.querySelector("#list-orderNumber").innerHTML = retrievedStorage[i].rank + ".";
+
+        listOrder.querySelector("#cut-text").innerHTML = retrievedStorage[i].name;
+
+        var seconds = retrievedStorage[i].seconds;
+        var time = pad(parseInt(seconds / 60));
+        time += ':';
+        time += pad(seconds % 60);
+        listOrder.querySelector("#time").innerHTML = time;
+    }
 }
 
 // Small field
@@ -577,7 +705,7 @@ function clickFace() {
 }
 
 // button action to how rank list
-function ranklistShow(){
+function ranklistShow() {
     document.getElementById('ranklist_popup').hidden = false;
 
     /*document.getElementById(GAME_HARDNESS + '_list').hidden = false;
@@ -589,19 +717,13 @@ function ranklistShow(){
 }
 
 // function to close the pop up when X is clicked
-function closePopUp(string){
+function closePopUp(string) {
     document.getElementById(string).hidden = true;
 }
 
 // it displayes the content of the wanted list
-function showList(evt, hardness){
-    var i, tabcontent, tablinks;
-
-    // sets every tab content to hidden
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].hidden = true;
-    }
+function showList(evt, hardness) {
+    var i, tablinks;
 
     // takes away the focus from the tablinks (buttons)
     tablinks = document.getElementsByClassName("tablinks");
@@ -609,7 +731,8 @@ function showList(evt, hardness){
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    // add the focus to the button, adds the class to show the tabcontent
-    document.getElementById(hardness + '_list').hidden = false;
+    // add the focus to the button
     evt.currentTarget.className += " active";
+
+    drawRankList(hardness);
 }
