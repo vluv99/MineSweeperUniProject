@@ -85,9 +85,6 @@ function gameEnd(isLost) {
     // stop the time
     setTimeVar = false;
 
-    //TODO: delete this, once the testing is over for the list and popup
-    document.getElementById('popup1').hidden = false;
-
     // if the player lost
     if (isLost === true) {
         for (i = 0; i < array.length; i++) {
