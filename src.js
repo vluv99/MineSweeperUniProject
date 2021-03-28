@@ -68,6 +68,12 @@ function sound(src) {
     }
 }
 
+function playSound(url){
+    const audio = new Audio(url);
+    audio.volume = 0.3;
+    audio.play();
+}
+
 // Cloning function
 function cloneElement(selector, innerSelector, idValue, parentSelector) {
     // Create a clone of the cell
@@ -87,6 +93,10 @@ function gameEnd(isLost) {
 
     // if the player lost
     if (isLost === true) {
+
+        // bomb sound when lost
+        playSound('/assets/bomb_sound.mp3');
+
         for (i = 0; i < array.length; i++) {
             for (j = 0; j < array[i].length; j++) {
                 if (array[i][j].bomb === true) {
@@ -102,17 +112,17 @@ function gameEnd(isLost) {
         // if the player won
         // TODO: figure out something fun + popup for the list + check list
 
+        // winning sound start
+        playSound('/assets/win_sound.mp3');
+
         // check wether the time is better than any of the ones in the arrays
         if (checkScoreForRanklist(totalSeconds)){
             document.getElementById('popup1').hidden = false;
         }
-
-
-        //pop up
-        //document.getElementById('popup1').hidden = false;
     }
 }
 
+// checks the time winners time if its better than any of the ranklist ones
 function checkScoreForRanklist(seconds) {
     var retrievedObject;
 
@@ -122,47 +132,64 @@ function checkScoreForRanklist(seconds) {
         retrievedObject = JSON.parse(localStorage.getItem('hard_localStorage'));
     }
 
-    for (i = 0; retrievedObject.length; i++){
-        if (retrievedObject[i].seconds > seconds){
-            return true;
+    // check if storage is null
+    if (retrievedObject !== null) {
+        for (i = 0; retrievedObject.length; i++) {
+            if (retrievedObject[i].seconds > seconds) {
+                return true;
+            }
         }
+    } else {
+        return true;
     }
 
     return false;
 }
 
+// updates the localstorage
 function storeScore(seconds, name){
     var retrievedObject;
 
+    // create blank object to fill in the storage
     var newScore ={
         rank: 0,
         name: name,
         seconds: seconds
     }
 
+    // retrive the appropriate storage
     if (GAME_HARDNESS === 'easy'){
         retrievedObject = JSON.parse(localStorage.getItem('easy_localStorage'));
     } else if (GAME_HARDNESS === 'hard'){
         retrievedObject = JSON.parse(localStorage.getItem('hard_localStorage'));
     }
 
-    var inserted = false;
-    for (i = 0; i < retrievedObject.length; i++){
-        if (retrievedObject[i].seconds > seconds && !inserted){
-            // calculate rank
-            newScore.rank = i+1;
+    if (retrievedObject === null){
+        newScore.rank = 1;
+        retrievedObject = [newScore];
 
-            // set new element into the array while keeping the old ones
-            retrievedObject.splice(i, 0, newScore);
+    } else {
+        var inserted = false;
 
-            inserted = true;
-        }else {
-            retrievedObject[i].rank = i+1;
+        for (i = 0; i < retrievedObject.length; i++) {
+
+            if (retrievedObject[i].seconds > seconds && !inserted) {
+                // calculate rank
+                newScore.rank = i + 1;
+
+                // set new element into the array while keeping the old ones
+                retrievedObject.splice(i, 0, newScore);
+
+                inserted = true;
+            } else if (inserted) {
+                // after insert, we update the rank of the others behind the new data
+                retrievedObject[i].rank = i + 1;
+            }
         }
     }
 
+    // remove last element if the array has more than 10
     if (retrievedObject.length > 10){
-        // remove last element if the array has more than 10
         retrievedObject.splice(10, 1);
     }
 
@@ -174,6 +201,7 @@ function storeScore(seconds, name){
     }
 }
 
+// onClick action to get the name, store the new data and UI movements
 function submitResult(){
     var name = document.getElementById("nameInput").value;
 
@@ -183,6 +211,7 @@ function submitResult(){
     ranklistShow();
 }
 
+// header face icon changing function
 function changeFace(html_cell) {
     let isLost;
 
@@ -279,6 +308,7 @@ function floodFill(cell, x, y) {
     }
 
     cell.hidden = false;
+    playSound('/assets/Plop_sound_short.mp3');
     //clickSound.play();
     cellsToClickUntilWin--;
     updateCell(cell);
@@ -646,28 +676,47 @@ function drawRankList(hardness) {
     var retrievedStorage;
 
     if (hardness === 'easy') {
-        document.querySelector('.tabcontent').innerHTML = "<h3>Easy:</h3>\n" + "<!-- template here -->";
-
+        //get storage
         retrievedStorage = JSON.parse(localStorage.getItem('easy_localStorage'));
-    } else if (hardness === 'hard') {
-        document.querySelector('.tabcontent').innerHTML = "<h3>Hard:</h3>\n" + "<!-- template here -->";
 
+        // check if empty
+        if (retrievedStorage === null){
+            // if empty put text in it
+            document.querySelector('.tabcontent').innerHTML = "<p style='margin-top: 25px'>No results yet :(</p>";
+        } else {
+            // else put the proper things into it
+            document.querySelector('.tabcontent').innerHTML = "<h3>Easy:</h3>\n" + "<!-- template here -->";
+        }
+    } else if (hardness === 'hard') {
+        //get storage
         retrievedStorage = JSON.parse(localStorage.getItem('hard_localStorage'));
+
+        // check if empty
+        if (retrievedStorage === null){
+            // if empty put text in it
+            document.querySelector('.tabcontent').innerHTML = "<p style='margin-top: 25px'>No results yet :(</p>";
+        } else {
+            // else put the proper things into it
+            document.querySelector('.tabcontent').innerHTML = "<h3>Hard:</h3>\n" + "<!-- template here -->";
+        }
     }
 
-    for (i = 0; i < retrievedStorage.length; i++) {
-        cloneElement('#list-row-template', '#list-row', 'list-row-' + i, '.tabcontent');
+    //check if the storage is undefined
+    if (retrievedStorage !== null) {
+        for (i = 0; i < retrievedStorage.length; i++) {
+            cloneElement('#list-row-template', '#list-row', 'list-row-' + i, '.tabcontent');
 
-        var listOrder = document.getElementById('list-row-' + i);
-        listOrder.querySelector("#list-orderNumber").innerHTML = retrievedStorage[i].rank + ".";
+            var listOrder = document.getElementById('list-row-' + i);
+            listOrder.querySelector("#list-orderNumber").innerHTML = retrievedStorage[i].rank + ".";
 
-        listOrder.querySelector("#cut-text").innerHTML = retrievedStorage[i].name;
+            listOrder.querySelector("#cut-text").innerHTML = retrievedStorage[i].name;
 
-        var seconds = retrievedStorage[i].seconds;
-        var time = pad(parseInt(seconds / 60));
-        time += ':';
-        time += pad(seconds % 60);
-        listOrder.querySelector("#time").innerHTML = time;
+            var seconds = retrievedStorage[i].seconds;
+            var time = pad(parseInt(seconds / 60));
+            time += ':';
+            time += pad(seconds % 60);
+            listOrder.querySelector("#time").innerHTML = time;
+        }
     }
 }
 
