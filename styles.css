@@ -269,7 +269,7 @@ header {
     padding: 20px;
     background: var(--background-color);
     border-radius: 5px;
-    width: 30%;
+    width: 20%;
     position: relative;
     transition: all 5s ease-in-out;
 }
