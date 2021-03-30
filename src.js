@@ -10,6 +10,7 @@ var setTimeVar = false;
 var isGameOver = false;
 var cellsToClickUntilWin;
 var clickSound;
+const backgroundSong = new Audio('/assets/background_song.mp3');;
 
 var easy_localStorage = [];
 var hard_localStorage = [];
@@ -53,19 +54,18 @@ function pad(val) {
     }
 }
 
-function sound(src) {
-    this.sound = document.createElement("audio");
-    this.sound.src = src;
-    this.sound.setAttribute("preload", "auto");
-    this.sound.setAttribute("controls", "none");
-    this.sound.style.display = "none";
-    document.body.appendChild(this.sound);
-    this.play = function () {
-        this.sound.play();
-    }
-    this.stop = function () {
-        this.sound.pause();
-    }
+function playBackgroundMusic(){
+    backgroundSong.volume = 0.3;
+    backgroundSong.loop = true;
+    backgroundSong.play();
+
+    document.querySelector("article").innerHTML = '<i class="fas fa-volume-mute" onclick="stopBackgroundMusic()"></i>';
+}
+
+function stopBackgroundMusic(){
+    backgroundSong.pause();
+
+    document.querySelector("article").innerHTML = '<i class="fas fa-volume-off" onclick="playBackgroundMusic()"></i>';
 }
 
 function playSound(url){
@@ -108,9 +108,7 @@ function gameEnd(isLost) {
                 }
             }
         }
-    } else {
-        // if the player won
-        // TODO: figure out something fun + popup for the list + check list
+    } else { // if the player won
 
         // winning sound start
         playSound('/assets/win_sound.mp3');

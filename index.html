@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="./fontawesome/fontawesome-free-5.15.2-web/fontawesome-free-5.15.2-web/css/all.css" rel="stylesheet">
 </head>
+<article><i class="fas fa-volume-off" onclick="playBackgroundMusic()"></i></article>
 <body>
 <header>
     <div id="bomb_count" class="header-content">
@@ -41,7 +42,7 @@
         <a class="close" id="popup_close" onclick="closePopUp('popup1')">&times;</a>
         <div class="content">
             <label>
-                <div>You managed to acquire place on the ranklist.</div>
+                <div>Put your name on the ranklist!</div>
                 <input id="nameInput" class="popup_input" type="text" placeholder="Your username">
             </label>
             <input class="popup_button" type="button" value="OK" onclick="submitResult()"/>

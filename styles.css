@@ -16,6 +16,10 @@ body {
 
 }
 
+article{
+    padding: 4px;
+}
+
 ::selection{
     background: var(--primary-color);
 }
